@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayazit Weltraum-Schule</title>
+<meta name="theme-color" content="#05080d">
+<meta name="description" content="Lern-App Weltraum: Sonnensystem, Sterne, Galaxien, Schwarze Löcher, Raumfahrt und Teleskope als kleine Videos.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Weltraum">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script>(function(){var m='dark';try{m=localStorage.getItem('kompass-theme')||'dark'}catch(e){}var t=m==='auto'?(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):m;document.documentElement.setAttribute('data-theme',t);})();</script>
+<style>
+:root{
+  --bg:#05080d; --panel:#0b1118; --card:#0f1620; --card2:#0a0f15; --line:#1b2532; --line2:#2a3647; --line3:#36465b; --text:#dfe6ef; --soft:#b9c4d2; --soft2:#c9d2de; --mute:#7f8b9c;
+  --up:#1fcf8f; --down:#f0605d; --gold:#f5c542; --blue:#4c9aff; --purple:#b388ff; --orange:#ff9f43; --aqua:#22d3ee;
+  --chart:#020407; --hdr:rgba(5,8,13,.92); --veil:rgba(5,8,13,.75); --on-gold:#1b1505; --on-up:#03140d;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --sans:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+[data-theme="light"]{
+  --bg:#f3f5f9; --panel:#eef2f7; --card:#ffffff; --card2:#f7f9fc; --line:#dde3ec; --line2:#c9d2de; --line3:#b7c2d1; --text:#131a26; --soft:#3d4757; --soft2:#2c3646; --mute:#5d6879;
+  --up:#087f5b; --down:#c62f2c; --gold:#946200; --blue:#1a66c9; --purple:#7445cc; --orange:#b45000; --aqua:#00838f;
+  --chart:#ffffff; --hdr:rgba(243,245,249,.92); --veil:rgba(255,255,255,.85); --on-gold:#ffffff; --on-up:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+header{position:sticky;top:0;z-index:5;background:var(--hdr);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;flex:none}
+.brand{white-space:nowrap;font-family:var(--mono);font-weight:800;letter-spacing:.06em;font-size:15px;line-height:1.15}
+.brand small{display:block;color:var(--mute);font-weight:500;font-size:11px;letter-spacing:.12em}
+.theme{margin-left:auto;display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px;flex:none}
+.theme button{border:0;background:none;color:var(--mute);font-family:var(--mono);font-size:12px;font-weight:700;border-radius:999px;padding:6px 10px;min-height:32px}
+.theme button[aria-pressed="true"]{background:var(--gold);color:var(--on-gold)}
+.theme button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.prog{margin-left:12px;font-family:var(--mono);font-size:11px;color:var(--mute);text-align:right}
+.bar{width:110px;height:5px;background:var(--line);border-radius:9px;margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--up),var(--gold));width:0;transition:width .4s}
+main{display:grid;grid-template-columns:330px 1fr;max-width:1280px;margin:0 auto;min-height:calc(100vh - 60px)}
+#nav{border-right:1px solid var(--line);padding:14px 12px 40px;height:calc(100vh - 60px);overflow:auto;position:sticky;top:60px}
+#search{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit;font-size:15px;outline:none}
+#search:focus{border-color:var(--gold)}
+.cat{margin:18px 4px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.cat::after{content:"";flex:1;height:1px;background:var(--line)}
+.item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:10px;padding:9px 8px;margin:2px 0}
+.item:hover{background:var(--card)}
+.item.on{background:var(--card);border-color:var(--line2)}
+.item .ic{width:36px;height:36px;flex:none;border-radius:8px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center}
+.box b{color:var(--text)}
+.item b{display:block;font-size:14.5px;font-weight:600}
+.item span{display:block;font-size:12px;color:var(--mute);margin-top:1px}
+.item .ok{margin-left:auto;color:var(--up);font-size:14px;opacity:0}
+.item.seen .ok{opacity:1}
+#view{padding:18px 22px 60px;min-width:0}
+.back{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 12px;font-size:14px;margin-bottom:12px}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase}
+h1{font-family:var(--mono);font-weight:800;letter-spacing:.03em;font-size:clamp(24px,4.4vw,36px);margin:4px 0 4px;text-transform:uppercase}
+.lead{color:var(--soft);margin:0 0 14px;font-size:15.5px;line-height:1.5;max-width:760px}
+.player{background:var(--chart);border:1px solid var(--line);border-radius:16px;overflow:hidden;max-width:900px}
+.cwrap{position:relative;cursor:pointer}
+canvas{display:block;width:100%}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .25s}
+.overlay.show{opacity:1}
+.overlay div{background:var(--veil);border:1px solid var(--line2);border-radius:999px;padding:12px 18px;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.06em}
+.caption{padding:12px 16px 4px;min-height:74px;border-top:1px solid var(--line)}
+.caption .no{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.14em}
+.caption p{margin:5px 0 0;font-size:15.5px;line-height:1.45;transition:opacity .25s}
+.ctrl{display:flex;align-items:center;gap:8px;padding:8px 12px 12px}
+.cb{background:var(--card);border:1px solid var(--line);border-radius:9px;min-width:40px;height:38px;padding:0 10px;font-family:var(--mono);font-size:14px;font-weight:700}
+.cb:hover{border-color:var(--line3)}
+#seek{flex:1;accent-color:var(--down);height:28px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 12px 14px}
+.chip{background:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+.chip.on{border-color:var(--gold);color:var(--gold)}
+.chip.done{color:var(--text)}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:16px;max-width:900px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.box h3{margin:0 0 8px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.box p,.box li{font-size:14.5px;line-height:1.5;color:var(--soft2);margin:0}
+.box ul{margin:0;padding-left:18px}.box li{margin:3px 0}
+.box.g h3{color:var(--up)}.box.y h3{color:var(--gold)}.box.b h3{color:var(--blue)}.box.r h3{color:var(--down)}
+.pn{display:flex;justify-content:space-between;gap:10px;margin-top:18px;max-width:900px}
+.pn button{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;font-size:14px}
+.pn button:last-child{text-align:right}
+.pn small{display:block;color:var(--mute);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;margin-bottom:3px}
+.pn button:disabled{opacity:.35;cursor:default}
+.disc{color:var(--mute);font-size:12px;margin-top:22px;max-width:900px}
+.home{max-width:900px}
+.home .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:left}
+.tile:hover{border-color:var(--line3)}
+.tile b{display:block;font-family:var(--mono);font-size:14px;letter-spacing:.05em;text-transform:uppercase;margin:10px 0 4px}
+.tile span{color:var(--mute);font-size:13px}
+.quizbtn{background:var(--card);border-color:var(--line2) !important;margin-top:12px}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;max-width:760px}
+.qbar{height:5px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:14px}.qbar i{display:block;height:100%;background:var(--gold)}
+.qq{font-size:18px;font-weight:700;line-height:1.4;margin:0 0 12px}
+.qcv{border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:12px;background:#020407}
+.opts{display:grid;gap:8px}
+.opt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;text-align:left;font-size:15.5px}
+.opt:hover:not(:disabled){border-color:var(--line3)}
+.opt.ok{border-color:var(--up);background:rgba(31,207,143,.12)}
+.opt.bad{border-color:var(--down);background:rgba(240,96,93,.12)}
+.opt:disabled{cursor:default}
+.fb{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:14.5px;line-height:1.5}
+.fb b{font-family:var(--mono)}
+.qnav{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.qnav button{flex:1;min-width:140px;border-radius:12px;padding:12px;font-weight:700;border:1px solid var(--line);background:var(--panel)}
+.qnav .main{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.score{font-family:var(--mono);font-size:54px;font-weight:800;margin:6px 0}
+.calc{margin-top:12px;max-width:900px}
+.calc .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:8px 0 12px}
+.calc label{font-size:12px;color:var(--mute);font-family:var(--mono);letter-spacing:.06em}
+.calc input{width:100%;margin-top:4px;padding:10px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--text);font:inherit;font-size:16px}
+.calc .res{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.calc .res div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
+.calc .res span{display:block;font-size:11.5px;color:var(--mute);font-family:var(--mono)}
+.calc .res b{font-family:var(--mono);font-size:18px}
+.bigtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px;margin-top:18px}
+.big{position:relative;overflow:hidden;text-align:left;background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:18px;padding:18px 18px 16px;min-height:168px;display:flex;flex-direction:column;transition:transform .15s,border-color .15s}
+.big:hover{transform:translateY(-2px);border-color:var(--acc)}
+.big::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--acc)}
+.big::after{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%)}
+.big .bi{position:absolute;right:14px;top:16px;opacity:.95}
+.big h2{font-family:var(--mono);font-weight:800;font-size:clamp(17px,1.6vw + 6px,21px);letter-spacing:.03em;text-transform:uppercase;margin:0 70px 8px 0;line-height:1.2;color:var(--acc)}
+.big p{margin:0 0 14px;color:var(--soft);font-size:14.5px;line-height:1.45;max-width:85%}
+.big .ft{margin-top:auto;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;color:var(--mute)}
+.big .pb{flex:1;height:5px;background:var(--line);border-radius:9px;overflow:hidden}.big .pb i{display:block;height:100%;background:var(--acc)}
+.big .go{color:var(--acc);font-size:16px;font-weight:800}
+.lcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:16px}
+.lc{display:flex;align-items:center;gap:12px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.lc:hover{border-color:var(--acc)}
+.lc canvas.th{width:88px;height:55px;flex:none;border-radius:8px;border:1px solid var(--line);background:var(--chart)}
+.lc .ic{width:48px;height:48px;flex:none;border-radius:10px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center}
+.lc small{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--mute)}
+.lc b{display:block;font-size:16px;margin:2px 0}
+.lc span{display:block;font-size:13px;color:var(--mute)}
+.lc .ok{margin-left:auto;color:var(--up);font-size:18px}
+.start{margin-top:16px;background:var(--up);color:var(--on-up);border:0;border-radius:12px;padding:13px 20px;font-weight:800;font-size:15px}
+@media (max-width:860px){
+  main{grid-template-columns:1fr}
+  #nav{position:static;height:auto;border-right:0;padding:12px 14px 40px}
+  #view{padding:14px 12px 50px}
+  #nav{display:none}
+  .bar{width:70px}
+  .theme button .tl{display:none}
+  .theme button{padding:6px 9px}
+  .brand small{display:none}
+  .brand{font-size:13.5px}
+  header{gap:9px;padding:12px 12px}
+  .prog{margin-left:4px}
+  .bar{width:56px}
+}
+</style>
+</head>
+<body>
+<header>
+  <svg class="logo" viewBox="0 0 34 34"><rect width="34" height="34" rx="8" fill="#0f1620"/><circle cx="7" cy="8" r="1" fill="#dfe6ef"/><circle cx="27" cy="27" r="1" fill="#dfe6ef"/><circle cx="28" cy="7" r=".8" fill="#dfe6ef"/><ellipse cx="17" cy="17" rx="13" ry="4.5" fill="none" stroke="#f5c542" stroke-width="1.6" transform="rotate(-20 17 17)"/><circle cx="17" cy="17" r="7" fill="#b388ff"/><path d="M10.5 15 A7 7 0 0 1 23.5 15" fill="none" stroke="#f5c542" stroke-width="1.6" transform="rotate(-20 17 17)"/></svg>
+  <div class="brand" style="cursor:pointer" onclick="location.hash=''">WELTRAUM-SCHULE<small>BAYAZIT · REISE DURCHS ALL</small></div>
+  <div class="theme" role="group" aria-label="Darstellung"><button data-m="dark" title="Dunkel">☾<span class="tl"> Dunkel</span></button><button data-m="light" title="Hell">☀<span class="tl"> Hell</span></button><button data-m="auto" title="Automatisch">◐<span class="tl"> Auto</span></button></div>
+  <div class="prog"><span id="progtxt">0 / 0</span><div class="bar"><i id="progbar"></i></div></div>
+</header>
+<main>
+  <nav id="nav">
+    <input id="search" placeholder="Lektion suchen … z. B. Mond" autocomplete="off" aria-label="Lektion suchen">
+    <div id="list"></div>
+  </nav>
+  <section id="view"></section>
+</main>
+<script>
+"use strict";
+/* ============ Farben & Helfer ============ */
+const VW=400,VH=250;
+const THEMES={
+ dark:{bg:'#020407',grid:'#111a24',axis:'#6f7b8c',text:'#e6ecf3',mute:'#7f8b9c',line:'#1b2532',line2:'#2a3647',
+  up:'#1fcf8f',down:'#f0605d',gold:'#f5c542',blue:'#4c9aff',purple:'#b388ff',orange:'#ff9f43',aqua:'#22d3ee',pink:'#ff6fae',
+  pillBg:'rgba(2,4,7,.9)',metal:'#9aa7b8',metal2:'#6b7889',metal3:'#4a5565',metalHi:'#d5dde8',block:'#121a24',blockLine:'#3a4859',head:'#18222e',
+  air:'#4c9aff',fuel:'#22d3ee',fire:'#ff7a1a',fire2:'#ffd23f',exhaust:'#8b95a3',oil:'#f5a623',water:'#38bdf8',hot:'#f0605d',cold:'#4c9aff',
+  carBody:'#141d28',carLine:'#5b6b80',road:'#0d141c',roadLine:'#3a4859',batt:'#1fcf8f',outline:'#020407',glass:'rgba(76,154,255,.15)'},
+ light:{bg:'#ffffff',grid:'#eef1f5',axis:'#5d6879',text:'#131a26',mute:'#5d6879',line:'#dde3ec',line2:'#c9d2de',
+  up:'#087f5b',down:'#c62f2c',gold:'#946200',blue:'#1a66c9',purple:'#7445cc',orange:'#b45000',aqua:'#00838f',pink:'#c2185b',
+  pillBg:'rgba(255,255,255,.95)',metal:'#8793a3',metal2:'#5f6b7b',metal3:'#465160',metalHi:'#c4ccd7',block:'#eef2f7',blockLine:'#8a96a8',head:'#e2e8f0',
+  air:'#1a66c9',fuel:'#00838f',fire:'#e8590c',fire2:'#f59f00',exhaust:'#6b7280',oil:'#b45000',water:'#0284c7',hot:'#c62f2c',cold:'#1a66c9',
+  carBody:'#f1f4f8',carLine:'#7d8899',road:'#e9edf2',roadLine:'#b7c2d1',batt:'#087f5b',outline:'#ffffff',glass:'rgba(26,102,201,.1)'}};
+const C=Object.assign({},THEMES.dark);
+function setCanvasTheme(t){Object.assign(C,THEMES[t]||THEMES.dark);}
+const MONO="'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace";
+const SANS="'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif";
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>{x=clamp(x);return x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;};
+const lerp=(a,b,f)=>a+(b-a)*f;
+const TAU=Math.PI*2,rad=d=>d*Math.PI/180;
+const deN=(x,d=0)=>x.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+function hexA(hex,a){if(hex[0]!=='#')return hex;const n=parseInt(hex.slice(1),16);return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`;}
+const G={nolabel:false};
+/* Sichtbarkeit: Element erscheint ab Schritt k */
+function ap(st,k,f=3){if(st.s>k)return 1;if(st.s<k)return 0;return clamp(st.p*f);}
+function only(st,k,f=4){if(st.s!==k)return 0;return clamp(Math.min(st.p*f,(1-st.p)*f+.6));}
+
+function rr(g,x,y,w,h,r){r=Math.min(r,w/2,h/2);g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function box(g,x,y,w,h,fill,stroke,r=6,lw=1.4){rr(g,x,y,w,h,r);if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=lw;g.stroke();}}
+function circ(g,x,y,r,fill,stroke,lw=1.4){g.beginPath();g.arc(x,y,r,0,TAU);if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=lw;g.stroke();}}
+function line(g,x1,y1,x2,y2,col,lw=1.5,dash){g.save();g.strokeStyle=col;g.lineWidth=lw;if(dash)g.setLineDash(dash);g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.restore();}
+function poly(g,pts,fill,stroke,lw=1.4,close=true){g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));if(close)g.closePath();if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=lw;g.stroke();}}
+function txt(g,x,y,s,col,size=11,align='center',weight=700,font=MONO){g.font=`${weight} ${size}px ${font}`;g.fillStyle=col;g.textAlign=align;g.textBaseline='middle';g.fillText(s,x,y);}
+function arrowHead(g,x1,y1,x2,y2,col,s=7){const a=Math.atan2(y2-y1,x2-x1);g.fillStyle=col;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-s*Math.cos(a-.45),y2-s*Math.sin(a-.45));g.lineTo(x2-s*Math.cos(a+.45),y2-s*Math.sin(a+.45));g.closePath();g.fill();}
+function arrow(g,x1,y1,x2,y2,col,lw=2,a=1,both=false){if(a<=0)return;g.save();g.globalAlpha*=a;g.strokeStyle=col;g.lineWidth=lw;g.beginPath();const ang=Math.atan2(y2-y1,x2-x1),k=lw*2;g.moveTo(x1+(both?Math.cos(ang)*k:0),y1+(both?Math.sin(ang)*k:0));g.lineTo(x2-Math.cos(ang)*k,y2-Math.sin(ang)*k);g.stroke();arrowHead(g,x1,y1,x2,y2,col,5+lw*1.5);if(both)arrowHead(g,x2,y2,x1,y1,col,5+lw*1.5);g.restore();}
+/* Beschriftungs-Pille */
+function pill(g,x,y,text,col,a=1,align='center',size=11){
+ if(a<=0||G.nolabel)return;g.save();g.globalAlpha*=a;g.font=`700 ${size}px ${MONO}`;
+ const w=g.measureText(text).width+12,h=size+8;let x0=align==='center'?x-w/2:align==='left'?x:x-w;
+ x0=Math.max(2,Math.min(VW-w-2,x0));const y0=y-h/2;
+ g.fillStyle=C.pillBg;rr(g,x0,y0,w,h,5);g.fill();g.strokeStyle=col;g.lineWidth=1.2;g.stroke();
+ g.fillStyle=col;g.textBaseline='middle';g.textAlign='left';g.fillText(text,x0+6,y+.5);g.restore();
+}
+/* Pille mit Hinweislinie zu einem Punkt */
+function tag(g,px,py,x,y,text,col,a=1,align='center'){if(a<=0||G.nolabel)return;g.save();g.globalAlpha*=a;g.strokeStyle=col;g.lineWidth=1;g.setLineDash([3,3]);g.beginPath();g.moveTo(px,py);g.lineTo(x,y);g.stroke();g.setLineDash([]);circ(g,px,py,2.6,col);g.restore();pill(g,x,y,text,col,a,align);}
+/* Titel-Pille oben links (Phase) */
+function head(g,text,col,a=1){pill(g,8,15,text,col,a,'left',11.5);}
+/* Punkte entlang eines Pfades bewegen */
+function pathLen(pts){let L=[0];for(let i=1;i<pts.length;i++)L.push(L[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]));return L;}
+function pathAt(pts,L,d){const tot=L[L.length-1];d=((d%tot)+tot)%tot;let i=1;while(i<L.length-1&&L[i]<d)i++;const f=(d-L[i-1])/((L[i]-L[i-1])||1);return[lerp(pts[i-1][0],pts[i][0],f),lerp(pts[i-1][1],pts[i][1],f)];}
+function flow(g,pts,t,col,o={}){const L=pathLen(pts),tot=L[L.length-1],gap=o.gap||16,sp=o.speed||.05,r=o.r||2.4;g.save();g.globalAlpha*=(o.a==null?1:o.a);g.fillStyle=col;
+ for(let d=0;d<tot;d+=gap){const dd=d+t*sp;if(o.limit!=null&&((dd%tot)+tot)%tot>o.limit*tot)continue;const p=pathAt(pts,L,dd);g.beginPath();g.arc(p[0],p[1],r,0,TAU);g.fill();}g.restore();}
+function pipe(g,pts,col,w=8,a=1){g.save();g.globalAlpha*=a;g.strokeStyle=col;g.lineWidth=w;g.lineJoin='round';g.lineCap='round';g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.stroke();g.restore();}
+/* Zahnrad (außen) */
+function gear(g,x,y,r,z,ang,fill,stroke,o={}){const d=o.depth||Math.max(3,r*.12);g.beginPath();
+ for(let k=0;k<z;k++){const a0=ang+k*TAU/z,w=TAU/z;const pts=[[a0-w*.5,r-d],[a0-w*.28,r+d*.9],[a0+w*.0,r+d],[a0+w*.28,r+d*.9]];
+  // Zahnmitte bei a0
+  const seq=[[a0-w*.5,r-d],[a0-w*.3,r-d],[a0-w*.18,r+d],[a0+w*.18,r+d],[a0+w*.3,r-d],[a0+w*.5,r-d]];
+  seq.forEach((p,i)=>{const X=x+Math.cos(p[0])*p[1],Y=y+Math.sin(p[0])*p[1];(k===0&&i===0)?g.moveTo(X,Y):g.lineTo(X,Y);});}
+ g.closePath();g.fillStyle=fill;g.fill();g.strokeStyle=stroke;g.lineWidth=o.lw||1.4;g.stroke();
+ if(o.hub!==false){circ(g,x,y,Math.max(3,r*.22),C.bg,stroke,1.2);}
+ if(o.mark){const mr=r*.62;circ(g,x+Math.cos(ang)*mr,y+Math.sin(ang)*mr,Math.max(2.5,r*.09),o.mark);}
+}
+/* Hohlrad (Innenverzahnung) */
+function ringGear(g,x,y,r,R,z,ang,fill,stroke,o={}){const d=o.depth||Math.max(3,r*.06);g.beginPath();g.arc(x,y,R,0,TAU);
+ for(let k=z-1;k>=0;k--){const a0=ang+k*TAU/z,w=TAU/z;const seq=[[a0+w*.5,r+d],[a0+w*.3,r+d],[a0+w*.18,r-d],[a0-w*.18,r-d],[a0-w*.3,r+d],[a0-w*.5,r+d]];
+  seq.forEach((p,i)=>{const X=x+Math.cos(p[0])*p[1],Y=y+Math.sin(p[0])*p[1];(k===z-1&&i===0)?g.moveTo(X,Y):g.lineTo(X,Y);});}
+ g.closePath();g.fillStyle=fill;g.fill('evenodd');g.strokeStyle=stroke;g.lineWidth=1.4;g.stroke();
+ if(o.mark){const mr=(r+R)/2;circ(g,x+Math.cos(ang)*mr,y+Math.sin(ang)*mr,3,o.mark);}
+}
+/* Diagramm-Achsen */
+function axes(g,x0,y0,w,h,xl,yl,xt,yt,a=1){g.save();g.globalAlpha*=a;
+ g.strokeStyle=C.grid;g.lineWidth=1;(yt||[]).forEach(v=>{const y=y0-v[0]*h;g.beginPath();g.moveTo(x0,y);g.lineTo(x0+w,y);g.stroke();txt(g,x0-4,y,v[1],C.axis,9,'right',500);});
+ (xt||[]).forEach(v=>{const x=x0+v[0]*w;txt(g,x,y0+9,v[1],C.axis,9,'center',500);});
+ g.strokeStyle=C.axis;g.lineWidth=1.3;g.beginPath();g.moveTo(x0,y0-h);g.lineTo(x0,y0);g.lineTo(x0+w,y0);g.stroke();
+ txt(g,x0+w,y0+21,xl,C.mute,9.5,'right',700);txt(g,x0+2,y0-h-9,yl,C.mute,9.5,'left',700);g.restore();}
+function plot(g,fn,x0,y0,w,h,col,lw=2.5,upto=1,a=1){g.save();g.globalAlpha*=a;g.strokeStyle=col;g.lineWidth=lw;g.lineJoin='round';g.beginPath();const n=120;let first=true;
+ for(let i=0;i<=n*upto;i++){const u=i/n,v=fn(u);if(v==null){first=true;continue;}const X=x0+u*w,Y=y0-v*h;first?g.moveTo(X,Y):g.lineTo(X,Y);first=false;}g.stroke();g.restore();}
+/* Integral (für Drehwinkel bei variabler Geschwindigkeit) */
+function integ(f,T,n=60){let s=0;for(let i=0;i<n;i++)s+=f((i+.5)/n*T)*T/n;return s;}
+
+/* ============ Weltraum-Helfer ============ */
+Object.assign(THEMES.dark,{space:'#02040a',star:'#e6ecf3',sunC:'#ffd23f',sunE:'#ff8a1f',earth:'#3d8bff',land:'#1fcf8f',moon:'#d6dde8',moonD:'#1e2733',shade:'rgba(0,0,0,.62)',neb:'#b388ff',body:'#17212d',bodyLine:'#8394ab',ground:'#0b1219'});
+Object.assign(THEMES.light,{space:'#f6f8fc',star:'#7d8899',sunC:'#f5b700',sunE:'#e8590c',earth:'#1a66c9',land:'#087f5b',moon:'#c9a227',moonD:'#dfe5ec',shade:'rgba(19,26,38,.45)',neb:'#7445cc',body:'#ffffff',bodyLine:'#5f6b7b',ground:'#e4e9ef'});
+Object.assign(C,THEMES.dark);
+function rng(seed){let s=seed%2147483647||1;return()=>{s=s*16807%2147483647;return(s-1)/2147483646;};}
+const STARS=(()=>{const r=rng(7);return Array.from({length:110},()=>[r()*400,r()*250,r()*1.2+.35,r()*6.3]);})();
+function stars(g,t,a=1,drift=0){if(a<=0)return;g.save();g.fillStyle=C.star;for(const[x,y,r,ph]of STARS){const X=((x-t*drift)%400+400)%400;g.globalAlpha=a*(.55+.3*Math.sin(t*.0015+ph*3));g.beginPath();g.arc(X,y,r,0,TAU);g.fill();}g.restore();}
+function glow(g,x,y,r,col,a=1){if(a<=0||r<=0)return;const gr=g.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,hexA(col,.55*Math.min(1,a)));gr.addColorStop(1,hexA(col,0));g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,TAU);g.fill();}
+function sun(g,x,y,r,a=1,col,col2){if(a<=0)return;g.save();g.globalAlpha*=a;glow(g,x,y,r*2,col2||C.sunE,.9);const gr=g.createRadialGradient(x-r*.25,y-r*.25,r*.05,x,y,r);gr.addColorStop(0,'#fff8d6');gr.addColorStop(.55,col||C.sunC);gr.addColorStop(1,col2||C.sunE);g.fillStyle=gr;g.beginPath();g.arc(x,y,r,0,TAU);g.fill();g.restore();}
+function ringArc(g,x,y,r,col,back){g.save();g.strokeStyle=col;g.lineWidth=Math.max(1.5,r*.22);g.beginPath();g.ellipse(x,y,r*2.1,r*.5,-.25,back?Math.PI:0,back?TAU:Math.PI);g.stroke();g.restore();}
+function planet(g,x,y,r,col,o={}){const la=o.la==null?Math.PI:o.la;
+ if(o.ring)ringArc(g,x,y,r,o.ring,true);
+ g.save();g.beginPath();g.arc(x,y,r,0,TAU);g.fillStyle=col;g.fill();g.clip();
+ if(o.bands){const n=o.bands.length;o.bands.forEach((b,i)=>{g.fillStyle=b;g.fillRect(x-r,y-r+2*r*(i+.6)/(n+.4),2*r,Math.max(1,r*.13));});}
+ if(o.land){g.fillStyle=C.land;const rot=o.rot||0;[[-.35,-.25,.32],[.3,.2,.28],[.1,-.5,.16],[-.1,.45,.2]].forEach(([dx,dy,s])=>{const X=x+(((dx+rot)%3+4.5)%3-1.5)*r;g.beginPath();g.ellipse(X,y+dy*r,s*r,s*r*.65,0,0,TAU);g.fill();});}
+ if(o.craters){g.fillStyle='rgba(0,0,0,.18)';[[-.3,-.2,.18],[.25,.3,.14],[.35,-.35,.1],[-.1,.45,.12],[.05,.0,.08]].forEach(([dx,dy,s])=>{g.beginPath();g.arc(x+dx*r,y+dy*r,s*r,0,TAU);g.fill();});}
+ if(o.spot){g.fillStyle=o.spot;g.beginPath();g.ellipse(x+r*.25,y+r*.3,r*.18,r*.1,0,0,TAU);g.fill();}
+ if(o.shade!==false){const lx=Math.cos(la),ly=Math.sin(la);const gr=g.createLinearGradient(x+lx*r,y+ly*r,x-lx*r,y-ly*r);gr.addColorStop(0,'rgba(255,255,255,.22)');gr.addColorStop(.46,'rgba(0,0,0,0)');gr.addColorStop(.62,C.shade);gr.addColorStop(1,C.shade);g.fillStyle=gr;g.fillRect(x-r,y-r,2*r,2*r);}
+ g.restore();if(o.stroke!==false)circ(g,x,y,r,null,hexA(C.mute,.55),1);
+ if(o.ring)ringArc(g,x,y,r,o.ring,false);
+}
+function ground(g,y,col){g.fillStyle=col||C.ground;g.fillRect(-10,y,420,260-y);}
+function earth(g,x,y,r,o={}){planet(g,x,y,r,C.earth,Object.assign({land:1},o));}
+function moonDisc(g,x,y,r,ph){circ(g,x,y,r,C.moonD,hexA(C.mute,.7),1);ph=((ph%1)+1)%1;const k=Math.cos(ph*TAU);g.save();g.translate(x,y);if(ph>.5)g.scale(-1,1);g.beginPath();g.arc(0,0,r,-Math.PI/2,Math.PI/2);g.ellipse(0,0,Math.max(.01,r*Math.abs(k)),r,0,Math.PI/2,-Math.PI/2,k>0);g.closePath();g.fillStyle=C.moon;g.fill();g.restore();}
+const GJ=(()=>{const r=rng(11);return Array.from({length:600},()=>[r(),r(),r(),r()]);})();
+function galaxy(g,x,y,R,t,o={}){const tilt=o.tilt==null?1:o.tilt,arms=o.arms||2,rot=(o.rot||0)+t*(o.spin==null?.00015:o.spin),n=o.n||380,A=o.a==null?1:o.a;if(A<=0)return;
+ g.save();g.translate(x,y);g.rotate(o.ang||0);g.scale(1,tilt);g.globalAlpha*=A;glow(g,0,0,R*1.05,o.col||C.blue,.35);glow(g,0,0,R*.55,o.core||C.gold,.95);
+ for(let i=0;i<n;i++){const[j1,j2,j3,j4]=GJ[i%600];let px,py,col;
+  if(o.bar&&j4<.18){const u=(j1-.5)*2;px=u*R*.32;py=(j2-.5)*R*.1;const c=Math.cos(rot),s=Math.sin(rot);[px,py]=[px*c-py*s,px*s+py*c];col=o.core||C.gold;}
+  else{const arm=i%arms,f=Math.pow(j1,.85),r=R*((o.bar?.3:.08)+(o.bar?.7:.92)*f),a=rot+arm*TAU/arms+f*3.3+(j2-.5)*(.9-f*.3);px=Math.cos(a)*r;py=Math.sin(a)*r;col=f<.22?(o.core||C.gold):(j3<.55?(o.col||C.blue):C.star);}
+  g.fillStyle=col;g.beginPath();g.arc(px,py,(.7+j3*1.1)*(o.ds||1),0,TAU);g.fill();}
+ g.restore();const c=Math.cos(o.ang||0),s=Math.sin(o.ang||0);return{rot,at:(r,a)=>{const px=Math.cos(a)*r,py=Math.sin(a)*r*tilt;return[x+px*c-py*s,y+px*s+py*c];}};}
+function rocket(g,x,yb,h,o={}){const w=h*(o.w||.14),t=o.t||0;g.save();
+ if(o.flame>0){const fl=h*.35*o.flame*(.85+.15*Math.sin(t*.05));const gr=g.createLinearGradient(0,yb,0,yb+fl);gr.addColorStop(0,'#fff3b0');gr.addColorStop(.3,C.fire2);gr.addColorStop(1,hexA(C.fire,0));g.fillStyle=gr;g.beginPath();g.moveTo(x-w*.42,yb);g.quadraticCurveTo(x,yb+fl*1.25,x+w*.42,yb);g.closePath();g.fill();}
+ poly(g,[[x-w/2,yb-h*.25],[x-w*1.05,yb],[x-w/2,yb]],C.down,C.bodyLine,1.2);poly(g,[[x+w/2,yb-h*.25],[x+w*1.05,yb],[x+w/2,yb]],C.down,C.bodyLine,1.2);
+ box(g,x-w/2,yb-h*.82,w,h*.82,C.body,C.bodyLine,2,1.4);poly(g,[[x-w/2,yb-h*.82],[x,yb-h],[x+w/2,yb-h*.82]],C.body,C.bodyLine,1.4);
+ (o.stages||[]).forEach(f=>line(g,x-w/2,yb-h*f,x+w/2,yb-h*f,C.bodyLine,1.2));
+ if(o.win!==false)circ(g,x,yb-h*.66,w*.18,hexA(C.blue,.6),C.bodyLine,1);
+ g.restore();}
+function clock(g,x,y,r,ang,col,lab){circ(g,x,y,r,C.head,col,2);for(let k=0;k<12;k++){const a=k*TAU/12;line(g,x+Math.cos(a)*r*.78,y+Math.sin(a)*r*.78,x+Math.cos(a)*r*.92,y+Math.sin(a)*r*.92,C.mute,1.2);}
+ line(g,x,y,x+Math.cos(ang/12-Math.PI/2)*r*.5,y+Math.sin(ang/12-Math.PI/2)*r*.5,C.text,3);line(g,x,y,x+Math.cos(ang-Math.PI/2)*r*.78,y+Math.sin(ang-Math.PI/2)*r*.78,col,2.2);circ(g,x,y,2.6,col);if(lab)pill(g,x,y+r+14,lab,col,1);}
+function starDot(g,x,y,r,col,a=1){if(a<=0)return;g.save();g.globalAlpha*=a;glow(g,x,y,r*3,col,.9);circ(g,x,y,r,col,hexA(C.mute,.6),1);g.restore();}
+const TC=[[3000,'#ff5a36'],[4000,'#ff9a4a'],[5000,'#ffd27a'],[6000,'#fff1c0'],[8000,'#eef2ff'],[12000,'#c4d6ff'],[30000,'#8aaaff']];
+function tcol(T){if(T<=TC[0][0])return TC[0][1];for(let i=1;i<TC.length;i++){if(T<=TC[i][0]){const f=(T-TC[i-1][0])/(TC[i][0]-TC[i-1][0]),a=parseInt(TC[i-1][1].slice(1),16),b=parseInt(TC[i][1].slice(1),16);const c=k=>Math.round(lerp(a>>k&255,b>>k&255,f));return '#'+[16,8,0].map(k=>c(k).toString(16).padStart(2,'0')).join('');}}return TC[TC.length-1][1];}
+const WLH=[[380,275],[420,265],[450,235],[490,185],[520,130],[560,75],[580,55],[600,35],[630,12],[700,0]];
+function wlc(l,a=1){let h=0;for(let i=1;i<WLH.length;i++){if(l<=WLH[i][0]){const f=(l-WLH[i-1][0])/(WLH[i][0]-WLH[i-1][0]);h=lerp(WLH[i-1][1],WLH[i][1],clamp(f));break;}}return `hsla(${h},95%,${C.bg==='#ffffff'?45:58}%,${a})`;}
+function spectrum(g,x,y,w,h,lines,o={}){for(let i=0;i<w;i++){g.fillStyle=wlc(400+i/w*300,o.emit?.12:1);g.fillRect(x+i,y,1.2,h);}box(g,x,y,w,h,null,C.line2,2,1);
+ (lines||[]).forEach(l=>{const X=x+(l-400)/300*w+(o.shift||0);if(X<x||X>x+w)return;if(o.emit){g.fillStyle=wlc(l);g.fillRect(X-1.5,y,3,h);}else{g.fillStyle=C.bg==='#ffffff'?'#131a26':'#000000';g.fillRect(X-1.2,y,2.4,h);}});}
+const PLAN=[['MERKUR','#a8a29e',2.44,{craters:1}],['VENUS','#e8c37a',6.05,{}],['ERDE','',6.37,{land:1}],['MARS','#e0603a',3.39,{}],['JUPITER','#d9a066',69.9,{bands:['#a8704a','#ead2a8','#b9855a','#ead2a8'],spot:'#c4553a'}],['SATURN','#e6c97a',58.2,{ring:'#cdb27a',bands:['#cfb066','#efdca0']}],['URANUS','#7fdbe0',25.4,{}],['NEPTUN','#4166f5',24.6,{}]];
+const pcol=i=>PLAN[i][1]||C.earth;
+function issDraw(g,x,y,s){g.save();g.translate(x,y);g.scale(s,s);const lw=1/s;
+ [-46,-34,34,46].forEach(px=>{[-1,1].forEach(sg=>{box(g,px-4.5,sg<0?-30:5,9,25,hexA(C.orange,.35),C.orange,1,lw*1.2);for(let k=1;k<4;k++)line(g,px-4.5,(sg<0?-30:5)+k*6.25,px+4.5,(sg<0?-30:5)+k*6.25,hexA(C.orange,.6),lw*.8);});});
+ box(g,-56,-2,112,4,C.metal2,C.metalHi,1,lw);
+ box(g,-5,-14,10,40,C.body,C.bodyLine,2,lw*1.2);box(g,-14,6,28,8,C.body,C.bodyLine,2,lw*1.2);
+ [-20,20].forEach(px=>box(g,px-2,-12,4,10,hexA(C.star,.7),C.bodyLine,1,lw));g.restore();}
+function jwstIcon(g,x,y,s){g.save();g.translate(x,y);g.scale(s,s);const lw=1/s;
+ poly(g,[[-40,10],[0,-2],[40,10],[0,22]],hexA(C.purple,.35),C.purple,lw*1.4);poly(g,[[-34,14],[0,4],[34,14],[0,24]],hexA(C.purple,.25),C.purple,lw);
+ line(g,0,4,0,-8,C.bodyLine,lw*2);
+ const H=(cx,cy,r)=>{g.beginPath();for(let k=0;k<6;k++){const a=k*TAU/6+Math.PI/6;g.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r*.55);}g.closePath();g.fillStyle=hexA(C.gold,.75);g.fill();g.strokeStyle=C.gold;g.lineWidth=lw;g.stroke();};
+ [[0,-26],[-9,-21],[9,-21],[-9,-31],[9,-31],[0,-36],[0,-16]].forEach(([a,b])=>H(a,b,5.4));g.restore();}
+
+/* ============ LEKTIONEN ============ */
+const CATS={sonne:'Sonnensystem',sterne:'Sterne',galaxien:'Galaxien & Universum',extrem:'Schwarze Löcher & Extremes',raumfahrt:'Raumfahrt',beobachten:'Beobachten & Messen'};
+const LESSONS=[];
+const les=o=>LESSONS.push(o);
+const S=(arr)=>arr.map(a=>({d:a[0],text:a[1]}));
+function lines(g,L,x,y0,dy){if(G.nolabel)return;L.forEach((l,i)=>{const a=l[3]==null?1:l[3];if(a<=0)return;g.save();g.globalAlpha=a;txt(g,x,y0+i*dy,l[0],l[1],l[2],'left',l[4]||600);g.restore();});}
+
+/* ---------- SONNENSYSTEM ---------- */
+les({id:'sonne',cat:'sonne',title:'Die Sonne',sub:'Unser Stern und seine Kraft',
+ steps:S([[4400,'Die Sonne ist ein Stern – eine riesige Kugel aus glühendem Gas, vor allem Wasserstoff und Helium.'],
+ [5000,'Sie ist gewaltig: Ihr Durchmesser beträgt rund 1,39 Mio. km. Die Erde passt etwa 109-mal nebeneinander hinein.'],
+ [5400,'Im Kern herrschen rund 15 Mio. °C. Dort verschmelzen Wasserstoffkerne zu Helium – die Kernfusion. Dabei wird riesige Energie frei.'],
+ [5200,'Die Energie wandert langsam nach außen. Die sichtbare Oberfläche (Photosphäre) ist „nur“ etwa 5.500 °C heiß.'],
+ [6000,'Rechnen: Licht braucht für 150 Mio. km bei 300.000 km/s: 150.000.000 ÷ 300.000 = 500 Sekunden ≈ 8,3 Minuten.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.8);
+  if(s===0){sun(g,170,125,72);pill(g,330,90,'WASSERSTOFF ≈ 73 %',C.gold,1);pill(g,330,118,'HELIUM ≈ 25 %',C.orange,1);pill(g,330,146,'REST ≈ 2 %',C.mute,1);pill(g,170,232,'DIE SONNE – EIN STERN',C.text,1);}
+  if(s===1){sun(g,115,125,105);const n=Math.floor(clamp(p*1.3)*109);for(let i=0;i<n;i++){circ(g,10+i*210/109+1,125,.96,C.earth);}
+   circ(g,330,125,1.2,C.earth);circ(g,330,125,9,null,C.earth,1.4);pill(g,330,105,'ERDE',C.earth,1);pill(g,330,40,`${n} ERDEN`,C.gold,1);pill(g,330,200,'Ø 1,39 MIO. km',C.text,1);}
+  if(s===2){sun(g,140,125,96);const pu=1+.12*Math.sin(t*.01);glow(g,140,125,40*pu,'#ffffff',1);circ(g,140,125,24,hexA(C.fire2,.9),C.fire,1.6);tag(g,140,125,140,22,'KERN · 15 MIO. °C',C.fire,1);
+   const c=(t*.0006)%1,ix=320,iy=110;box(g,262,58,118,104,C.pillBg,C.line2,8);
+   if(c<.6){const f=ease(c/.6);[[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a,b])=>circ(g,ix+a*36*(1-f),iy+b*30*(1-f),5,C.blue,C.bg,1));}
+   else{const f=(c-.6)/.4;circ(g,ix-4,iy,7,C.orange,C.bg,1);circ(g,ix+4,iy,7,C.purple,C.bg,1);for(let k=0;k<8;k++){const a=k*TAU/8;line(g,ix+Math.cos(a)*(12+f*18),iy+Math.sin(a)*(12+f*18),ix+Math.cos(a)*(18+f*24),iy+Math.sin(a)*(18+f*24),C.gold,2);}}
+   pill(g,321,188,'4 × H → He + ENERGIE',C.gold,1);}
+  if(s===3){const cx=120,cy=125;circ(g,cx,cy,100,hexA(C.sunE,.85));circ(g,cx,cy,86,hexA(C.orange,.55));circ(g,cx,cy,62,hexA(C.sunC,.4));circ(g,cx,cy,24,C.fire2,C.fire,1.4);glow(g,cx,cy,30,'#ffffff',.8);
+   for(let i=0;i<10;i++){const a=i*TAU/10+.3,f=(t*.0004+i*.37)%1;circ(g,cx+Math.cos(a)*(24+f*76),cy+Math.sin(a)*(24+f*76),2,C.text);}
+   const T=[[24*.7,-.9,'KERN',C.fire2,50],[44,-.45,'STRAHLUNGSZONE',C.gold,95],[75,.05,'KONVEKTIONSZONE',C.orange,140],[100,.55,'OBERFLÄCHE ≈ 5.500 °C',C.sunE,185]];
+   T.forEach(([r,a,n,col,y])=>tag(g,cx+Math.cos(a)*r,cy+Math.sin(a)*r,300,y,n,col,1));}
+  if(s===4){sun(g,30,125,32);earth(g,365,125,9);const f=clamp(p*1.25),X=lerp(64,354,f);line(g,64,125,354,125,hexA(C.gold,.3),1.2,[4,4]);glow(g,X,125,14,C.gold,1);circ(g,X,125,3.5,C.gold);
+   pill(g,200,40,f<1?`${deN(Math.round(f*500))} SEKUNDEN`:'500 s ≈ 8,3 MINUTEN',f<1?C.text:C.up,1);arrow(g,64,170,354,170,C.mute,1.4,1,true);pill(g,210,170,'150 MIO. km',C.mute,1);pill(g,200,214,'LICHT: 300.000 km/s',C.gold,1);}}
+ ,box:{was:'Die Sonne ist ein ganz normaler Stern und das Zentrum unseres Sonnensystems. Sie vereint über 99,8 % der gesamten Masse des Sonnensystems.',h2:'So erkennst du es',
+ erkennen:['<b>Kern:</b> Kernfusion bei ca. 15 Mio. °C','<b>Strahlungs- & Konvektionszone:</b> Energie wandert nach außen','<b>Photosphäre:</b> sichtbare Oberfläche, ca. 5.500 °C','Licht braucht ca. 8,3 Minuten bis zur Erde'],
+ bedeutung:'Ohne die Sonne gäbe es kein Leben: Sie liefert Licht, Wärme und über Pflanzen die Energie für fast alle Nahrungsketten. Auch Wind, Wetter und Solarstrom gehen auf sie zurück.',
+ tipp:'Nie direkt mit bloßem Auge, Fernglas oder Teleskop in die Sonne schauen – auch nicht kurz! Nur mit zertifizierter Sonnenfinsternis-Brille oder Spezialfilter.'}});
+
+les({id:'planeten',cat:'sonne',title:'Die acht Planeten',sub:'Reihenfolge, Gestein und Gasriesen',
+ steps:S([[5200,'Um die Sonne kreisen acht Planeten. Merksatz für die Reihenfolge: „Mein Vater erklärt mir jeden Sonntag unseren Nachthimmel.“'],
+ [5000,'Die vier inneren Planeten – Merkur, Venus, Erde, Mars – sind Gesteinsplaneten: klein, fest, mit einer Oberfläche zum Draufstehen.'],
+ [4600,'Zwischen Mars und Jupiter liegt der Asteroidengürtel mit Millionen von Gesteinsbrocken.'],
+ [5200,'Jupiter und Saturn sind Gasriesen, Uranus und Neptun Eisriesen. Sie haben keine feste Oberfläche.'],
+ [5200,'Größenvergleich: Jupiter ist rund 11-mal so breit wie die Erde – über 1.300 Erden würden in ihn hineinpassen.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.6);
+  if(s<4){const SX=-70,SY=125;sun(g,SX,SY,86);const R=[108,126,146,168,240,288,334,374],dr=[3,5,5.5,4,14,12,8,8];
+   g.save();g.strokeStyle=hexA(C.mute,.28);g.lineWidth=1;R.forEach(r=>{g.beginPath();g.arc(SX,SY,r,-.62,.62);g.stroke();});g.restore();
+   const bA=s===2?1:.45;for(let i=0;i<120;i++){const[j1,j2]=GJ[i];const r=192+j1*24,a=(j2-.5)*1.1+t*.00003*(1+j1);circ(g,SX+Math.cos(a)*r,SY+Math.sin(a)*r,.9+j1*.6,hexA(C.mute,bA));}
+   R.forEach((r,i)=>{const lim=i<4?.5:.3,a=lim*Math.sin(t*.00025*(9-i)+i*1.9),x=SX+Math.cos(a)*r,y=SY+Math.sin(a)*r;const dim=(s===1&&i>3)||(s===3&&i<4)?.3:1;
+    g.save();g.globalAlpha=dim;planet(g,x,y,dr[i],pcol(i),Object.assign({},PLAN[i][3],{la:Math.atan2(SY-y,SX-x)}));g.restore();
+    const off=(i%2?1:-1)*(dr[i]+(i===5?16:13));
+    if(s===0)pill(g,x,y+off,PLAN[i][0][0],i===2?C.earth:C.gold,1);
+    if(s===3&&i>3)pill(g,x,y+off,PLAN[i][0],i<6?C.orange:C.aqua,1);
+    if(s===1&&i<4)tag(g,x,y,40+i*80,i%2?228:22,PLAN[i][0],i===2?C.earth:C.orange,1);});
+   if(s===0)pill(g,392,232,'M · V · E · M · J · S · U · N',C.gold,1,'right');
+   if(s===2)pill(g,200,22,'ASTEROIDENGÜRTEL',C.mute,1);
+   if(s===3)pill(g,392,22,'GAS- & EISRIESEN',C.aqua,1,'right');}
+  else{planet(g,115,125,95,pcol(4),PLAN[4][3]);earth(g,300,125,8.5);pill(g,115,236,'JUPITER Ø 139.820 km',C.orange,1);pill(g,300,152,'ERDE Ø 12.742 km',C.earth,1);
+   pill(g,305,40,'≈ 11 × BREITER',C.gold,ap(st,4));pill(g,305,68,'1.300 ERDEN PASSEN HINEIN',C.up,clamp(p*2-.6));}}
+ ,box:{was:'Ein Planet ist ein großer Himmelskörper, der um einen Stern kreist, durch seine eigene Schwerkraft rund ist und seine Bahn „freigeräumt“ hat. Unser Sonnensystem hat acht davon.',h2:'So erkennst du sie',
+ erkennen:['<b>Gesteinsplaneten:</b> Merkur, Venus, Erde, Mars','<b>Gasriesen:</b> Jupiter, Saturn','<b>Eisriesen:</b> Uranus, Neptun','Merksatz: Mein Vater erklärt mir jeden Sonntag unseren Nachthimmel'],
+ bedeutung:'Pluto gilt seit 2006 nicht mehr als Planet, sondern als Zwergplanet – er hat seine Bahn nicht von anderen Objekten freigeräumt.',
+ tipp:'Venus, Mars, Jupiter und Saturn kannst du oft mit bloßem Auge sehen. Planeten funkeln weniger als Sterne – das ist ein guter Hinweis.'}});
+
+les({id:'mond',cat:'sonne',title:'Der Mond & seine Phasen',sub:'Warum der Mond sich verändert',
+ steps:S([[5000,'Der Mond kreist in rund 27,3 Tagen um die Erde. Er leuchtet nicht selbst – er wird von der Sonne angestrahlt.'],
+ [5400,'Eine Hälfte des Mondes ist immer hell. Je nachdem, wo er gerade steht, sehen wir von der Erde aus mehr oder weniger davon.'],
+ [4600,'Neumond: Der Mond steht zwischen Erde und Sonne. Wir sehen nur seine dunkle Seite.'],
+ [4600,'Vollmond: Der Mond steht auf der anderen Seite der Erde. Wir sehen seine ganze beleuchtete Seite.'],
+ [6000,'Von Neumond zu Neumond dauert es 29,5 Tage – länger als ein Umlauf, weil die Erde inzwischen ein Stück um die Sonne weitergewandert ist.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);const ex=165,ey=128,R=82;
+  for(let k=0;k<5;k++){const y=40+k*44;arrow(g,4,y,34,y,C.gold,1.6,.8);}pill(g,6,14,'SONNENLICHT →',C.gold,1,'left');
+  g.save();g.strokeStyle=hexA(C.mute,.4);g.setLineDash([3,4]);circ(g,ex,ey,R,null,hexA(C.mute,.4),1);g.restore();
+  earth(g,ex,ey,20,{rot:t*.0004});
+  const th=s===2?Math.PI:s===3?0:Math.PI-t*.0005;const mx=ex+Math.cos(th)*R,my=ey+Math.sin(th)*R;circ(g,mx,my,11,C.moonD,hexA(C.mute,.7),1);g.beginPath();g.arc(mx,my,11,Math.PI/2,Math.PI*1.5);g.fillStyle=C.moon;g.fill();
+  const ph=(((Math.PI-th)/TAU)%1+1)%1;
+  if(s>=1){box(g,300,30,94,118,C.pillBg,C.line2,10);moonDisc(g,347,80,32,ph);const nm=ph<.03||ph>.97?'NEUMOND':Math.abs(ph-.5)<.03?'VOLLMOND':Math.abs(ph-.25)<.03?'1. VIERTEL':Math.abs(ph-.75)<.03?'3. VIERTEL':ph<.5?'ZUNEHMEND':'ABNEHMEND';pill(g,347,132,nm,C.gold,1);txt(g,347,18,'VON DER ERDE',C.mute,9.5,'center',700);}
+  if(s===0)pill(g,ex,236,'UMLAUF ≈ 27,3 TAGE',C.text,1);
+  if(s===1)pill(g,ex,236,'EINE HÄLFTE IST IMMER HELL',C.text,1);
+  if(s===2)tag(g,mx,my+12,ex-R+10,206,'MOND ZWISCHEN ERDE & SONNE',C.blue,1,'left');
+  if(s===3)tag(g,mx,my+12,ex+R-10,206,'MOND HINTER DER ERDE',C.gold,1);
+  if(s===4)pill(g,ex,236,`TAG ${deN(ph*29.5,1)} VON 29,5`,C.up,1);}
+ ,box:{was:'Die Mondphasen entstehen, weil wir die beleuchtete Hälfte des Mondes aus wechselnden Blickwinkeln sehen. Mit Schatten der Erde hat das nichts zu tun.',h2:'So erkennst du es',
+ erkennen:['<b>Neumond:</b> unsichtbar, nahe der Sonne','<b>Zunehmend:</b> rechte Seite hell (bei uns)','<b>Vollmond:</b> ganz hell, abends im Osten','<b>Abnehmend:</b> linke Seite hell'],
+ bedeutung:'Der Mond zeigt uns immer dieselbe Seite, weil er sich in genau der gleichen Zeit einmal um sich selbst dreht, in der er die Erde umkreist (gebundene Rotation).',
+ tipp:'Merkhilfe für unsere Breiten: Rechts hell = der Mond nimmt zu, links hell = er nimmt ab. Der Vollmond geht ungefähr dann auf, wenn die Sonne untergeht.'}});
+
+les({id:'jahreszeiten',cat:'sonne',title:'Jahreszeiten',sub:'Die schiefe Erdachse',
+ steps:S([[5000,'Die Erde kreist in einem Jahr (365,25 Tagen) um die Sonne. Dabei ist ihre Drehachse um 23,4° geneigt.'],
+ [5000,'Die Achse zeigt das ganze Jahr in dieselbe Richtung im Weltall – grob zum Polarstern.'],
+ [5200,'Im Juni ist die Nordhalbkugel zur Sonne geneigt: Die Sonne steht hoch, die Tage sind lang – bei uns ist Sommer.'],
+ [5200,'Im Dezember ist die Nordhalbkugel von der Sonne weggeneigt: flache Sonne, kurze Tage – Winter.'],
+ [5800,'Wichtig: Nicht die Entfernung macht die Jahreszeiten! Anfang Januar ist die Erde der Sonne sogar am nächsten (rund 147 Mio. km).']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);const cx=200,cy=125,rx=150,ry=60,tl=rad(23.4);
+  g.save();g.strokeStyle=hexA(C.mute,.45);g.setLineDash([4,4]);g.beginPath();g.ellipse(cx,cy,rx,ry,0,0,TAU);g.stroke();g.restore();
+  const E=(a,r,lab)=>{const x=cx+Math.cos(a)*rx,y=cy+Math.sin(a)*ry;earth(g,x,y,r,{la:Math.atan2(cy-y,cx-x)});const dx=Math.sin(tl)*r*1.6,dy=Math.cos(tl)*r*1.6;line(g,x-dx,y+dy,x+dx,y-dy,C.text,1.6);circ(g,x+dx,y-dy,2.2,C.down);return[x,y];};
+  const list=s===1?[0,Math.PI/2,Math.PI,Math.PI*1.5]:[s===2?Math.PI:s===3?0:t*.00035];
+  const r0=s>=2&&s<=3?22:14;
+  list.filter(a=>Math.sin(a)<0).forEach(a=>E(a,r0));sun(g,cx,cy,24);let pos;list.filter(a=>Math.sin(a)>=0).forEach(a=>{pos=E(a,r0);});
+  if(s===0){pill(g,cx,22,'1 JAHR = 365,25 TAGE',C.text,1);pill(g,cx,232,'ACHSE 23,4° GENEIGT',C.gold,1);}
+  if(s===1){starDot(g,370,22,3,C.star);pill(g,330,22,'POLARSTERN',C.text,1,'right');pill(g,cx,232,'ACHSE ZEIGT IMMER GLEICH',C.gold,1);}
+  if(s===2){pill(g,52,180,'JUNI',C.gold,1);pill(g,cx,232,'NORDHALBKUGEL ZUR SONNE → SOMMER',C.gold,1);}
+  if(s===3){pill(g,350,180,'DEZEMBER',C.blue,1);pill(g,cx,232,'NORDHALBKUGEL WEG → WINTER',C.blue,1);}
+  if(s===4){pill(g,40,206,'JULI ≈ 152 MIO. km',C.mute,1,'left');pill(g,360,206,'JANUAR ≈ 147 MIO. km',C.mute,1,'right');pill(g,cx,22,'ENTFERNUNG ≠ JAHRESZEIT',C.down,1);}}
+ ,box:{was:'Jahreszeiten entstehen durch die Neigung der Erdachse um 23,4°. Dadurch trifft das Sonnenlicht im Lauf des Jahres mal steiler, mal flacher auf eine Erdhälfte.',h2:'So erkennst du es',
+ erkennen:['Sommer: Sonne steht mittags hoch, Tage lang','Winter: Sonne steht flach, Tage kurz','Auf der Südhalbkugel ist es genau umgekehrt','Tagundnachtgleiche: ca. 20. März und 22. September'],
+ bedeutung:'Steiles Licht verteilt sich auf eine kleine Fläche und wärmt stark, flaches Licht verteilt sich auf eine große Fläche und wärmt kaum. Dazu kommt die längere Tageslänge im Sommer.',
+ tipp:'In Australien feiert man Weihnachten im Hochsommer – am Strand! Dort ist die Südhalbkugel im Dezember zur Sonne geneigt.'}});
+
+/* ---------- STERNE ---------- */
+const PT=(()=>{const r=rng(21);return Array.from({length:180},()=>{const a=r()*TAU,d=Math.sqrt(r());return[Math.cos(a)*d,Math.sin(a)*d,r(),r()];});})();
+les({id:'sternentstehung',thumb:3,cat:'sterne',title:'Wie ein Stern entsteht',sub:'Vom Gasnebel zum leuchtenden Stern',
+ steps:S([[4800,'Alles beginnt mit einer riesigen, eiskalten Wolke aus Gas und Staub – einem Nebel. Sie ist nur rund 10 Grad über dem absoluten Nullpunkt.'],
+ [5000,'Die Schwerkraft zieht das Gas zusammen. Die Wolke ballt sich in der Mitte immer dichter.'],
+ [5400,'Der Klumpen dreht sich immer schneller und wird zu einer flachen Scheibe. In der Mitte wird es heißer und heißer: ein Protostern.'],
+ [5000,'Bei rund 10 Mio. °C zündet im Kern die Kernfusion. Ein neuer Stern leuchtet!'],
+ [5600,'Aus dem Rest der Scheibe können Planeten entstehen – so entstand vor 4,6 Mrd. Jahren auch unser Sonnensystem.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.35);const cx=200,cy=125;
+  const k=s===0?0:s===1?ease(p)*.55:s===2?.55+ease(p)*.3:.85,fl=s<2?1:s===2?lerp(1,.28,ease(p)):.28,spin=s>=2?t*.0007:0;
+  const fade=s>=4?.45:1;
+  PT.forEach(([x,y,r1,r2],i)=>{const d0=Math.hypot(x,y),a0=Math.atan2(y,x);const rr=d0*175*(1-k*(1-d0*.4));const a=a0+spin/(.25+d0)+(s===0?Math.sin(t*.0004+r1*6)*.05:0);
+   const px=cx+Math.cos(a)*rr,py=cy+Math.sin(a)*rr*.62*fl;g.fillStyle=hexA(i%3?C.neb:C.blue,(.35+r2*.4)*fade);g.beginPath();g.arc(px,py,.9+r2*1.6,0,TAU);g.fill();});
+  if(s===0){pill(g,cx,22,'GAS & STAUB',C.neb,1);pill(g,cx,232,'KALTER NEBEL ≈ −263 °C',C.blue,1);}
+  if(s===1){for(let j=0;j<8;j++){const a=j*TAU/8,R1=120-ease(p)*20;arrow(g,cx+Math.cos(a)*R1,cy+Math.sin(a)*R1*.62,cx+Math.cos(a)*(R1-34),cy+Math.sin(a)*(R1-34)*.62,C.gold,2,.9);}glow(g,cx,cy,20+p*25,C.orange,p);pill(g,cx,232,'SCHWERKRAFT ZIEHT ZUSAMMEN',C.gold,1);}
+  if(s===2){glow(g,cx,cy,30+p*20,C.orange,1);circ(g,cx,cy,3+p*4,C.orange);tag(g,cx,cy,300,40,'PROTOSTERN',C.orange,1);pill(g,cx,232,'DREHENDE SCHEIBE',C.neb,1);}
+  if(s>=3){const fl2=s===3?clamp(1-p*3):0;if(fl2>0)glow(g,cx,cy,160*fl2,'#ffffff',fl2);sun(g,cx,cy,12,1,'#ffe39a');}
+  if(s===3){pill(g,cx,26,'KERNFUSION ZÜNDET!',C.gold,1);pill(g,cx,232,'≈ 10 MIO. °C IM KERN',C.fire,1);}
+  if(s===4){[[38,C.orange,.004,3],[66,C.earth,.0025,4],[104,C.gold,.0013,7]].forEach(([r,col,w,sz],i)=>{g.save();g.strokeStyle=hexA(C.mute,.35);g.beginPath();g.ellipse(cx,cy,r,r*.28,0,0,TAU);g.stroke();g.restore();const a=t*w+i*2;circ(g,cx+Math.cos(a)*r,cy+Math.sin(a)*r*.28,sz,col);});
+   pill(g,cx,26,'PLANETEN ENTSTEHEN',C.up,1);pill(g,cx,232,'SO VOR 4,6 MRD. JAHREN',C.text,1);}}
+ ,box:{was:'Sterne entstehen in kalten Gas- und Staubwolken, wenn die Schwerkraft das Gas so stark zusammendrückt, dass im Kern die Kernfusion zündet.',h2:'So läuft es ab',
+ erkennen:['<b>Nebel:</b> kalte Wolke aus Gas und Staub','<b>Kollaps:</b> Schwerkraft zieht zusammen','<b>Protostern:</b> heißer Kern in einer Scheibe','<b>Zündung:</b> Kernfusion – ein Stern ist geboren'],
+ bedeutung:'Sternentstehung dauert Hunderttausende bis Millionen Jahre. Meist entstehen viele Sterne gleichzeitig in einem Sternhaufen.',
+ tipp:'Im Orionnebel kannst du eine echte Sternentstehungsregion sehen – schon im Fernglas als kleines Nebelfleckchen unter den drei Gürtelsternen.'}});
+
+les({id:'sternfarben',cat:'sterne',title:'Sternfarben & Temperatur',sub:'Warum Sterne rot, gelb oder blau leuchten',
+ steps:S([[5200,'Sterne haben unterschiedliche Farben – das sieht man schon mit bloßem Auge, z. B. beim rötlichen Beteigeuze und beim bläulichen Rigel im Orion.'],
+ [5400,'Die Farbe verrät die Temperatur: Rote Sterne sind „kühl“ (rund 3.000 °C), blaue Sterne sehr heiß (über 20.000 °C).'],
+ [5000,'Das ist wie bei einem Stück Eisen im Feuer: erst rot, dann gelb, dann weißlich. Je heißer, desto blauer.'],
+ [4600,'Unsere Sonne ist ein gelblicher Stern mit rund 5.500 °C Oberflächentemperatur – ein ganz durchschnittlicher Stern.'],
+ [5600,'Astronomen sortieren Sterne in Klassen: O, B, A, F, G, K, M – von heiß nach kühl. Die Sonne ist ein G-Stern.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.4);
+  if(s===0){const O=[[150,55,7,3500,'b'],[255,68,4,20000],[180,128,3.5,25000],[200,122,3.5,25000],[220,116,3.5,25000],[165,200,4,25000],[262,192,6,12000,'r']];
+   g.save();g.strokeStyle=hexA(C.mute,.4);g.setLineDash([3,4]);g.lineWidth=1;[[0,2],[1,4],[2,5],[4,6],[0,1]].forEach(([a,b])=>{g.beginPath();g.moveTo(O[a][0],O[a][1]);g.lineTo(O[b][0],O[b][1]);g.stroke();});g.restore();
+   O.forEach(([x,y,r,T])=>starDot(g,x,y,r*(1+.08*Math.sin(t*.004+x)),tcol(T)));
+   tag(g,150,55,62,26,'BETEIGEUZE',tcol(3200),1);tag(g,262,192,340,226,'RIGEL',C.blue,1);pill(g,360,30,'ORION',C.text,1);}
+  else if(s<4){const x0=40,w=320,y=196,X=T=>x0+Math.log(T/3000)/Math.log(10)*w;
+   for(let i=0;i<w;i++){g.fillStyle=tcol(3000*Math.pow(10,i/w));g.fillRect(x0+i,y,1.2,16);}box(g,x0,y,w,16,null,C.line2,3);
+   txt(g,x0,y+28,'3.000 °C',C.mute,9.5,'left',700);txt(g,x0+w,y+28,'30.000 °C',C.mute,9.5,'right',700);
+   const T=s===1?3000*Math.pow(10,ease(p)):s===2?3000*Math.pow(10,.5+.5*Math.sin(t*.0012)):5500;const mx=X(T);poly(g,[[mx,y-2],[mx-6,y-11],[mx+6,y-11]],C.text);
+   starDot(g,200,90,34,tcol(T));pill(g,200,22,`${deN(Math.round(T/100)*100)} °C`,C.text,1);
+   if(s===2)pill(g,40,150,'WIE GLÜHENDES EISEN',C.orange,1,'left');
+   if(s===3){pill(g,200,150,'SONNE · GELBLICH',C.gold,1);}}
+  else{const K=[['O',35000,20],['B',20000,16],['A',9000,13],['F',6800,11],['G',5500,10],['K',4300,9],['M',3200,7]];
+   K.forEach(([n,T,r],i)=>{const x=40+i*53,a=clamp(p*4-i*.35);starDot(g,x,110,r,tcol(T),a);pill(g,x,152,n,i===4?C.gold:C.text,a);});
+   tag(g,252,98,252,40,'SONNE',C.gold,ap(st,4)*clamp(p*3-1));pill(g,30,206,'← HEISS',C.blue,1,'left');pill(g,370,206,'KÜHL →',C.down,1,'right');}}
+ ,box:{was:'Die Farbe eines Sterns hängt von seiner Oberflächentemperatur ab: kühle Sterne leuchten rötlich, heiße bläulich-weiß.',h2:'So erkennst du es',
+ erkennen:['<b>Rot:</b> ca. 2.500–3.500 °C (Klasse M)','<b>Gelb:</b> ca. 5.000–6.000 °C (Klasse G, Sonne)','<b>Weiß:</b> ca. 7.000–10.000 °C (Klasse A)','<b>Blau:</b> über 10.000 °C (Klassen B und O)'],
+ bedeutung:'Die Farbe verrät viel über einen Stern: Blaue Riesen sind heiß, schwer und leben nur wenige Millionen Jahre. Kleine rote Zwerge leben dagegen Billionen Jahre.',
+ tipp:'Merksatz für die Klassen: „Oh Be A Fine Girl, Kiss Me“ – die Astronomen haben ihn auf Englisch erfunden.'}});
+
+les({id:'sternleben',cat:'sterne',title:'Das Leben der Sterne',sub:'Roter Riese, Weißer Zwerg, Supernova',
+ steps:S([[5600,'Ein Stern wie die Sonne verbrennt etwa 10 Mrd. Jahre lang Wasserstoff. Die Sonne ist rund 4,6 Mrd. Jahre alt – etwa in der Mitte ihres Lebens.'],
+ [5000,'Geht der Wasserstoff im Kern zur Neige, bläht sich der Stern zu einem Roten Riesen auf – über 100-mal größer als vorher.'],
+ [5600,'Dann stößt er seine äußeren Schichten ab: ein leuchtender Planetarischer Nebel. Übrig bleibt ein Weißer Zwerg – etwa so groß wie die Erde.'],
+ [5000,'Sehr schwere Sterne (über 8 Sonnenmassen) leben viel kürzer und enden in einer gewaltigen Explosion: einer Supernova.'],
+ [5800,'Übrig bleibt ein Neutronenstern oder ein Schwarzes Loch. Die Explosion verteilt Elemente wie Sauerstoff, Eisen und Gold im All.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);const cx=200,cy=115;
+  if(s===0){sun(g,cx,cy,34);const x0=60,x1=340,y=210;box(g,x0,y-4,x1-x0,8,C.line,null,4);box(g,x0,y-4,(x1-x0)*.46*clamp(p*1.5),8,C.gold,null,4);const mx=x0+(x1-x0)*.46;line(g,mx,y-10,mx,y+10,C.gold,2);pill(g,mx,y-24,'HEUTE: 4,6 MRD.',C.gold,1);txt(g,x0,y+20,'0',C.mute,10,'center',700);txt(g,x1,y+20,'10 MRD. JAHRE',C.mute,10,'right',700);}
+  if(s===1){const R=lerp(34,118,ease(p));sun(g,cx,cy+10,R,1,'#ff8a5c','#d6402a');pill(g,cx,232,'ROTER RIESE',C.down,1);if(p>.5)pill(g,cx,22,'> 100 × GRÖSSER',C.text,1);}
+  if(s===2){const r=26+ease(p)*95,a=1-p*.5;g.save();g.globalAlpha=a;g.lineWidth=10;const gr=g.createRadialGradient(cx,cy+10,r-12,cx,cy+10,r+8);gr.addColorStop(0,hexA(C.aqua,0));gr.addColorStop(.5,hexA(C.aqua,.65));gr.addColorStop(.8,hexA(C.neb,.5));gr.addColorStop(1,hexA(C.neb,0));g.fillStyle=gr;g.beginPath();g.arc(cx,cy+10,r+8,0,TAU);g.fill();g.restore();
+   starDot(g,cx,cy+10,4,'#eef2ff');tag(g,cx+4,cy+12,320,206,'WEISSER ZWERG',C.text,clamp(p*2));pill(g,cx,22,'PLANETARISCHER NEBEL',C.aqua,1);}
+  if(s===3){const pu=1+.06*Math.sin(t*.02*(1+p*3));sun(g,cx,cy+10,44*pu*(1-.3*clamp((p-.7)*4)),1,'#a9c1ff','#4c7dff');const f=clamp((p-.82)*6);if(f>0)glow(g,cx,cy+10,220*f,'#ffffff',f);pill(g,cx,232,'> 8 SONNENMASSEN',C.blue,1);}
+  if(s===4){const r=20+ease(p)*160;for(let i=0;i<90;i++){const[j1,j2,j3]=GJ[i];const a=j1*TAU,rr=r*(.75+j2*.3);circ(g,cx+Math.cos(a)*rr,cy+10+Math.sin(a)*rr*.85,1+j3*1.8,[C.fire,C.gold,C.neb,C.aqua][i%4]);}
+   starDot(g,cx,cy+10,3,'#eef2ff');[['O',C.blue,.3],['Fe',C.orange,1.9],['Au',C.gold,3.4],['C',C.mute,4.9]].forEach(([n,col,a])=>pill(g,cx+Math.cos(a)*r*.6,cy+10+Math.sin(a)*r*.5,n,col,clamp(p*3)));pill(g,cx,22,'SUPERNOVA',C.down,1);}}
+ ,box:{was:'Sterne verändern sich im Lauf ihres Lebens. Wie ein Stern endet, hängt vor allem von seiner Masse ab.',h2:'So erkennst du es',
+ erkennen:['<b>Wie die Sonne:</b> Roter Riese → Planetarischer Nebel → Weißer Zwerg','<b>Sehr schwer:</b> Supernova → Neutronenstern oder Schwarzes Loch','Je schwerer, desto kürzer das Leben','Rote Zwerge leben am längsten'],
+ bedeutung:'Fast alle Elemente schwerer als Helium wurden in Sternen und Sternexplosionen gebildet – auch das Kalzium in deinen Knochen und das Eisen in deinem Blut. Wir bestehen aus Sternenstaub!',
+ tipp:'Keine Sorge: Die Sonne wird erst in rund 5 Mrd. Jahren zum Roten Riesen. Eine Supernova wird sie nie – dafür ist sie zu leicht.'}});
+
+les({id:'lichtjahr',thumb:3,cat:'sterne',title:'Lichtjahre & Entfernungen',sub:'Rechnen: Wie weit ist ein Lichtjahr?',
+ steps:S([[4800,'Die Entfernungen im Weltall sind so riesig, dass Kilometer nicht mehr reichen. Der nächste Stern ist rund 40 Billionen km entfernt!'],
+ [5000,'Deshalb misst man in Lichtjahren. Licht ist das Schnellste, was es gibt: 300.000 km pro Sekunde – das sind 7,5 Erdumrundungen in einer Sekunde.'],
+ [5800,'Ein Lichtjahr ist die Strecke, die Licht in einem Jahr zurücklegt: 300.000 km/s × 31.557.600 s ≈ 9,46 Billionen km.'],
+ [5400,'Der nächste Stern nach der Sonne, Proxima Centauri, ist 4,2 Lichtjahre entfernt. Sein Licht ist also über 4 Jahre zu uns unterwegs.'],
+ [5600,'Ein Blick in den Himmel ist ein Blick in die Vergangenheit: Das Licht der Andromeda-Galaxie ist rund 2,5 Mio. Jahre zu uns gereist.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);
+  if(s===0){earth(g,40,125,14);starDot(g,365,125,5,tcol(3200));line(g,58,125,355,125,C.mute,1.2,[4,4]);pill(g,205,90,'≈ 40.000.000.000.000 km',C.text,1);pill(g,205,160,'KILOMETER SIND ZU KLEIN!',C.down,clamp(p*2-.4));}
+  if(s===1){earth(g,200,125,40,{rot:t*.0003});const a=t*.0472;g.save();g.strokeStyle=hexA(C.gold,.3);circ(g,200,125,52,null,hexA(C.gold,.3),1);g.restore();glow(g,200+Math.cos(a)*52,125+Math.sin(a)*52,12,C.gold,1);circ(g,200+Math.cos(a)*52,125+Math.sin(a)*52,3.5,C.gold);
+   pill(g,200,22,'300.000 km PRO SEKUNDE',C.gold,1);pill(g,200,232,'7,5 × UM DIE ERDE IN 1 s',C.text,1);}
+  if(s===2){lines(g,[['1 Jahr = 365,25 × 24 × 60 × 60',C.mute,12.5,ap(st,2)],['     = 31.557.600 Sekunden',C.text,12.5,clamp(p*4-.6)],['300.000 km/s × 31.557.600 s',C.aqua,12.5,clamp(p*4-1.4)],['≈ 9.460.000.000.000 km',C.gold,14,clamp(p*4-2.2),800],['= 1 LICHTJAHR',C.up,16,clamp(p*4-2.8),800]],22,40,38);}
+  if(s===3){sun(g,30,125,16);starDot(g,370,125,5,tcol(3200));const f=clamp(p*1.15),X=lerp(50,362,f);line(g,50,125,362,125,hexA(C.gold,.3),1.2,[4,4]);glow(g,X,125,12,tcol(3200),1);circ(g,X,125,3,C.gold);
+   pill(g,370,95,'PROXIMA CENTAURI',tcol(3200),1,'right');pill(g,200,170,`${deN(f*4.2,1)} JAHRE UNTERWEGS`,C.gold,1);}
+  if(s===4){earth(g,36,125,12);galaxy(g,320,118,62,t,{tilt:.42,ang:-.35,spin:.00005});const f=(t*.00025)%1,X=lerp(66,270,f);circ(g,X,125-f*8,2.6,C.gold);glow(g,X,125-f*8,9,C.gold,1);
+   pill(g,320,36,'ANDROMEDA',C.blue,1);pill(g,190,212,'LICHT ≈ 2,5 MIO. JAHRE ALT',C.gold,1);}}
+ ,box:{was:'Ein Lichtjahr ist eine Entfernung, keine Zeit: die Strecke, die Licht in einem Jahr zurücklegt – rund 9,46 Billionen Kilometer.',h2:'So rechnest du',
+ erkennen:['Licht: ca. 300.000 km pro Sekunde','1 Lichtjahr ≈ 9,46 Billionen km','Entfernung in km = Lichtjahre × 9,46 Billionen','Mond: 1,3 Lichtsekunden · Sonne: 8,3 Lichtminuten'],
+ bedeutung:'Je weiter wir ins All schauen, desto älter ist das Licht. Mit großen Teleskopen sehen wir Galaxien so, wie sie vor Milliarden Jahren aussahen – eine Zeitreise in die Vergangenheit.',
+ tipp:'Mit heutigen Raumsonden (ca. 60.000 km/h) bräuchte man bis Proxima Centauri über 70.000 Jahre.'}});
+
+/* ---------- GALAXIEN & UNIVERSUM ---------- */
+les({id:'milchstrasse',cat:'galaxien',title:'Die Milchstraße',sub:'Unsere Heimat-Galaxie',
+ steps:S([[5200,'Unsere Sonne ist einer von 100 bis 400 Milliarden Sternen in einer riesigen Sterneninsel: der Milchstraße. Von der Seite ist sie eine flache Scheibe.'],
+ [5400,'Von oben sähe sie aus wie eine Spirale mit einem Balken in der Mitte: eine Balkenspiralgalaxie, rund 100.000 Lichtjahre im Durchmesser.'],
+ [5000,'Die Sonne liegt in einem Seitenarm, etwa 26.000 Lichtjahre vom Zentrum entfernt – weit draußen in der Scheibe.'],
+ [5200,'Im Zentrum sitzt ein supermassereiches Schwarzes Loch: Sagittarius A* mit rund 4 Mio. Sonnenmassen.'],
+ [5800,'Die Sonne rast mit rund 230 km/s um das Zentrum – und braucht trotzdem etwa 230 Mio. Jahre für eine einzige Runde.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.3);const cx=200,cy=122;
+  if(s===0){glow(g,cx,cy,70,C.gold,1);for(let i=0;i<520;i++){const[j1,j2,j3]=GJ[i%600];const x=(j1-.5)*340,hh=12*(1-Math.abs(x)/180)+3;circ(g,cx+x,cy+(j2-.5)*2*hh*(.4+j3),.7+j3*.9,j3<.5?C.star:C.blue);}
+   g.save();g.scale(1,.5);glow(g,cx,cy*2,34,'#ffffff',.7);g.restore();pill(g,cx,40,'VON DER SEITE',C.text,1);pill(g,cx,212,'100–400 MRD. STERNE',C.gold,1);}
+  else{const sp=s===4?.00035:.00008,G2=galaxy(g,cx,cy,108,t,{bar:1,spin:sp,n:480});const sr=108*.3+108*.7*.42,sa=G2.rot+1.42+.05,sp2=G2.at(sr,sa);
+   if(s===1){arrow(g,cx-108,236,cx+108,236,C.mute,1.4,1,true);pill(g,cx,222,'≈ 100.000 LICHTJAHRE',C.text,1);}
+   if(s>=2&&s!==3){line(g,cx,cy,sp2[0],sp2[1],hexA(C.gold,.6),1.2,[3,3]);circ(g,sp2[0],sp2[1],5,null,C.gold,1.6);circ(g,sp2[0],sp2[1],2.4,C.gold);}
+   if(s===2)tag(g,sp2[0],sp2[1],330,30,'SONNE · 26.000 LJ',C.gold,1);
+   if(s===3){circ(g,cx,cy,5,C.bg,C.gold,1.6);glow(g,cx,cy,22,C.orange,.7+.3*Math.sin(t*.006));tag(g,cx,cy,200,22,'SAGITTARIUS A* · 4 MIO. SONNENMASSEN',C.orange,1);}
+   if(s===4){pill(g,8,22,'≈ 230 km/s',C.gold,1,'left');pill(g,392,232,'1 RUNDE ≈ 230 MIO. JAHRE',C.up,1,'right');}}}
+ ,box:{was:'Die Milchstraße ist die Galaxie, in der wir leben: eine flache, sich drehende Scheibe aus Sternen, Gas und Staub mit Spiralarmen und einem Balken in der Mitte.',h2:'So erkennst du sie',
+ erkennen:['Am dunklen Nachthimmel: helles, milchiges Band','Durchmesser ca. 100.000 Lichtjahre','Sonne ca. 26.000 Lichtjahre vom Zentrum','Zentrum: Schwarzes Loch Sagittarius A*'],
+ bedeutung:'Das milchige Band am Himmel ist der Blick in die eigene Scheibe – wir sehen Milliarden Sterne, die so dicht stehen, dass sie zu einem Leuchten verschmelzen.',
+ tipp:'Die Milchstraße siehst du am besten in einer mondlosen Sommernacht weit weg von Stadtlichtern – zum Beispiel auf dem Land oder in den Bergen.'}});
+
+les({id:'galaxientypen',cat:'galaxien',title:'Galaxientypen',sub:'Spiralen, Ellipsen und Chaos',
+ steps:S([[5000,'Im beobachtbaren Universum gibt es Hunderte Milliarden Galaxien – vielleicht sogar Billionen. Jede ist eine eigene Sterneninsel.'],
+ [5000,'Spiralgalaxien haben eine flache Scheibe mit Spiralarmen voller junger, blauer Sterne – wie die Milchstraße und die Andromeda-Galaxie.'],
+ [4800,'Elliptische Galaxien sind rund bis oval und haben keine Arme. Sie enthalten vor allem alte, rötliche Sterne.'],
+ [4800,'Irreguläre Galaxien haben keine feste Form – zum Beispiel die Große Magellansche Wolke, eine Begleiterin der Milchstraße.'],
+ [5600,'Galaxien können zusammenstoßen und verschmelzen. Auch die Milchstraße und Andromeda könnten in einigen Milliarden Jahren kollidieren.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.3);
+  if(s===0){const r=rng(5);for(let i=0;i<34;i++){const x=r()*380+10,y=r()*200+20,R=4+r()*12,typ=r();g.save();g.translate(x,y);g.rotate(r()*3);g.scale(1,.35+r()*.6);glow(g,0,0,R,typ<.4?C.orange:typ<.8?C.blue:C.neb,.9);g.restore();}pill(g,200,232,'HUNDERTE MILLIARDEN GALAXIEN',C.text,1);}
+  if(s===1){galaxy(g,200,118,100,t,{tilt:.55,ang:-.3,n:460});pill(g,200,232,'SPIRALGALAXIE',C.blue,1);}
+  if(s===2){g.save();g.translate(200,118);g.scale(1,.66);glow(g,0,0,110,C.orange,.9);glow(g,0,0,60,C.gold,1);for(let i=0;i<300;i++){const[j1,j2,j3]=GJ[i];const r=Math.pow(j1,1.8)*100,a=j2*TAU;circ(g,Math.cos(a)*r,Math.sin(a)*r,.7+j3*.8,j3<.5?C.orange:C.gold);}g.restore();pill(g,200,232,'ELLIPTISCHE GALAXIE',C.orange,1);}
+  if(s===3){[[150,100,40],[230,140,32],[205,80,22],[280,95,18]].forEach(([x,y,R],k)=>{glow(g,x,y,R*1.4,C.neb,.6);for(let i=0;i<70;i++){const[j1,j2,j3]=GJ[(i+k*70)%600];const r=Math.sqrt(j1)*R,a=j2*TAU;circ(g,x+Math.cos(a)*r,y+Math.sin(a)*r*.8,.7+j3,j3<.6?C.blue:C.star);}});pill(g,200,232,'IRREGULÄRE GALAXIE',C.neb,1);}
+  if(s===4){const f=ease(p),x1=lerp(95,175,f),x2=lerp(305,230,f);galaxy(g,x1,110,70,t,{tilt:.5,ang:.3,n:300});galaxy(g,x2,135,62,t,{tilt:.4,ang:-.5,n:280,rot:1});pill(g,x1,40,'MILCHSTRASSE',C.blue,1);pill(g,x2,210,'ANDROMEDA',C.blue,1);pill(g,200,236,'KOLLISION IN MRD. JAHREN?',C.gold,clamp(p*2-.5));}}
+ ,box:{was:'Galaxien sind riesige Ansammlungen aus Millionen bis Billionen Sternen, Gas, Staub und Dunkler Materie, die durch die Schwerkraft zusammengehalten werden.',h2:'So erkennst du sie',
+ erkennen:['<b>Spiral:</b> flache Scheibe mit Armen, blaue junge Sterne','<b>Elliptisch:</b> rund/oval, alte rötliche Sterne','<b>Irregulär:</b> ohne feste Form','<b>Balkenspirale:</b> Arme beginnen an einem Balken'],
+ bedeutung:'Galaxien sind die Bausteine des Universums. Sie stehen in Gruppen und Haufen zusammen – die Milchstraße gehört zur „Lokalen Gruppe“ mit rund 80 Galaxien.',
+ tipp:'Die Andromeda-Galaxie ist das am weitesten entfernte Objekt, das du mit bloßem Auge sehen kannst – im Herbst als schwacher Nebelfleck.'}});
+
+les({id:'urknall',cat:'galaxien',title:'Urknall & Expansion',sub:'Wie alles begann',
+ steps:S([[5200,'Vor rund 13,8 Mrd. Jahren war das ganze Universum extrem heiß und dicht. Dann begann es sich auszudehnen: der Urknall.'],
+ [5600,'Es war keine Explosion an einem Ort – der Raum selbst dehnt sich überall aus. Wie Rosinen in einem aufgehenden Hefeteig: Alle entfernen sich voneinander.'],
+ [5600,'Nach etwa 380.000 Jahren wurde das Universum durchsichtig. Dieses erste Licht messen wir heute noch: die kosmische Hintergrundstrahlung.'],
+ [5400,'Weit entfernte Galaxien entfernen sich von uns. Ihr Licht wird dabei auseinandergezogen – es wird röter. Das nennt man Rotverschiebung.'],
+ [6200,'Hubble-Gesetz: Je weiter weg, desto schneller. Pro Megaparsec (3,26 Mio. Lichtjahre) rund 70 km/s mehr. Eine Galaxie in 100 Mpc flieht also mit ca. 7.000 km/s.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s===0){stars(g,t,ease(p)*.5);const r=4+ease(p)*170;glow(g,200,125,r,'#ffffff',1-p*.4);glow(g,200,125,r*.7,C.orange,1-p*.3);glow(g,200,125,r*.35,C.gold,1);pill(g,200,22,'VOR 13,8 MRD. JAHREN',C.gold,1);pill(g,200,232,'URKNALL',C.text,clamp(1-p*2));pill(g,200,232,'DER RAUM DEHNT SICH AUS',C.text,clamp(p*2-1));}
+  if(s===1){const k=lerp(.55,1.1,(Math.sin(t*.0011-1.57)+1)/2);g.save();g.translate(200,120);box(g,-170*k,-95*k,340*k,190*k,hexA(C.gold,.1),hexA(C.gold,.5),30*k,1.4);
+   for(let i=-3;i<=3;i++)for(let j=-2;j<=2;j++){circ(g,i*44*k+(j%2)*10*k,j*36*k,4.5,i===0&&j===0?C.up:i===2&&j===1?C.orange:C.neb,C.bg,1);}
+   arrow(g,4,4,88*k+10*k-4,36*k-4,C.orange,1.6,1,true);g.restore();pill(g,200,22,`ABSTAND ${deN(k*10,1)} → WÄCHST`,C.orange,1);pill(g,200,236,'ALLE ENTFERNEN SICH',C.text,1);}
+  if(s===2){g.save();g.beginPath();g.ellipse(200,118,185,98,0,0,TAU);g.clip();const r=rng(3);for(let x=10;x<400;x+=8)for(let y=15;y<225;y+=8){const v=Math.sin(x*.05+r()*2)*Math.cos(y*.06+r()*2)+r()*.6-.3;g.fillStyle=v>0?hexA(C.orange,.35+v*.4):hexA(C.blue,.35-v*.4);g.fillRect(x,y,8.5,8.5);}g.restore();
+   g.save();g.strokeStyle=C.line2;g.beginPath();g.ellipse(200,118,185,98,0,0,TAU);g.stroke();g.restore();pill(g,200,236,'KOSMISCHE HINTERGRUNDSTRAHLUNG',C.text,1);pill(g,200,14,'ERSTES LICHT · 380.000 JAHRE',C.gold,1);}
+  if(s===3){stars(g,t,.3);earth(g,30,125,12);const gx=lerp(140,350,(t*.00015)%1);galaxy(g,gx,125,26,t,{tilt:.5,n:160});const lam=lerp(12,34,(gx-140)/210),col=(gx-140)/210<.5?C.blue:C.down;
+   g.save();g.strokeStyle=(gx-140)/210<.33?C.blue:(gx-140)/210<.66?C.gold:C.down;g.lineWidth=2;g.beginPath();for(let x=46;x<gx-26;x+=2){const y=125+Math.sin((gx-x)/lam*TAU)*9;x===46?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();g.restore();
+   arrow(g,gx+30,90,gx+60,90,C.orange,2,1);pill(g,200,30,'WELLE WIRD GEDEHNT → RÖTER',C.down,1);pill(g,200,220,'ROTVERSCHIEBUNG',C.text,1);}
+  if(s===4){const x0=58,y0=210,w=300,h=170;axes(g,x0,y0,w,h,'ENTFERNUNG (Mpc)','FLUCHT-TEMPO',[[0,'0'],[1/3,'100'],[2/3,'200'],[1,'300']],[[1/3,'7.000'],[2/3,'14.000'],[1,'21.000']]);
+   plot(g,u=>u,x0,y0,w,h,C.up,2.4,ease(clamp(p*1.5)),1);const r=rng(9);for(let i=0;i<16;i++){const u=r()*.95+.03;circ(g,x0+u*w,y0-(u+(r()-.5)*.08)*h,2.6,C.blue);}
+   const mx=x0+w/3,my=y0-h/3;line(g,mx,y0,mx,my,C.gold,1,[3,3]);line(g,x0,my,mx,my,C.gold,1,[3,3]);circ(g,mx,my,5,C.gold,C.bg,2);pill(g,mx+12,my-16,'100 Mpc → 7.000 km/s',C.gold,clamp(p*2-.6),'left');}}
+ ,box:{was:'Der Urknall beschreibt den Beginn unseres Universums vor rund 13,8 Mrd. Jahren aus einem extrem heißen, dichten Zustand. Seitdem dehnt sich der Raum aus.',h2:'So erkennst du es',
+ erkennen:['<b>Rotverschiebung:</b> ferne Galaxien entfernen sich','<b>Hintergrundstrahlung:</b> Nachglühen des Urknalls','<b>Hubble-Gesetz:</b> Tempo ≈ 70 km/s pro Mpc × Entfernung','Häufigkeit von Wasserstoff und Helium passt genau'],
+ bedeutung:'Die Ausdehnung zeigt: Früher war alles näher beisammen. Rechnet man zurück, kommt man auf ein Alter von rund 13,8 Mrd. Jahren.',
+ tipp:'Ein Teil des „Schnees“ auf alten Röhrenfernsehern ohne Sender stammte tatsächlich von der kosmischen Hintergrundstrahlung!'}});
+
+les({id:'dunkel',cat:'galaxien',title:'Dunkle Materie & Energie',sub:'Das große Rätsel des Universums',
+ steps:S([[5000,'In einer Spiralgalaxie kreisen die Sterne um das Zentrum. Erwartet hätte man: Weiter außen werden sie langsamer – wie die Planeten um die Sonne.'],
+ [5600,'Gemessen wurde aber: Auch die äußeren Sterne sind fast genauso schnell. Etwas Unsichtbares muss sie mit seiner Schwerkraft festhalten.'],
+ [5400,'Diese unsichtbare Masse heißt Dunkle Materie. Sie leuchtet nicht, wirkt aber über die Schwerkraft. Woraus sie besteht, weiß bis heute niemand.'],
+ [5200,'Dazu kommt die Dunkle Energie: Sie sorgt dafür, dass sich das Universum immer schneller ausdehnt.'],
+ [5800,'Die Bilanz: Nur rund 5 % des Universums sind normale Materie – Sterne, Planeten, wir. Etwa 27 % sind Dunkle Materie und 68 % Dunkle Energie.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s<2){const x0=50,y0=208,w=310,h=160;axes(g,x0,y0,w,h,'ABSTAND VOM ZENTRUM','TEMPO',[],[]);const ex=u=>u<.15?u/.15*.9:.9*Math.sqrt(.15/u),me=u=>u<.15?u/.15*.85:.85+.06*(u-.15);
+   plot(g,ex,x0,y0,w,h,C.mute,2.2,s===0?ease(p):1,1);pill(g,x0+w-4,y0-ex(1)*h+14,'ERWARTET',C.mute,1,'right');
+   if(s===1){g.save();g.globalAlpha=ease(p)*.5;g.fillStyle=hexA(C.purple,.35);g.beginPath();for(let i=0;i<=60;i++){const u=.15+.85*i/60;g.lineTo(x0+u*w,y0-me(u)*h);}for(let i=60;i>=0;i--){const u=.15+.85*i/60;g.lineTo(x0+u*w,y0-ex(u)*h);}g.closePath();g.fill();g.restore();
+    plot(g,me,x0,y0,w,h,C.up,2.6,ease(p),1);pill(g,x0+w-4,y0-me(1)*h-14,'GEMESSEN',C.up,1,'right');pill(g,x0+w*.6,y0-h*.62,'FEHLENDE MASSE?',C.purple,clamp(p*2-.8));}
+   if(s===0)galaxy(g,330,46,26,t,{tilt:.5,n:140,a:.9});}
+  if(s===2){stars(g,t,.3);const pu=1+.05*Math.sin(t*.003);glow(g,200,125,135*pu,C.purple,.75);galaxy(g,200,125,68,t,{tilt:.5,ang:-.2,n:300});pill(g,200,22,'HALO AUS DUNKLER MATERIE',C.purple,1);pill(g,200,232,'UNSICHTBAR – NUR SCHWERKRAFT',C.text,1);}
+  if(s===3){stars(g,t,.2);const k=1+(Math.exp(p*2.2)-1)*.32;for(let i=-4;i<=4;i++)for(let j=-3;j<=3;j++){const x=200+i*26*k,y=125+j*26*k;if(x<-10||x>410||y<-10||y>260)continue;glow(g,x,y,7,C.blue,.8);circ(g,x,y,1.6,C.star);}
+   pill(g,200,22,'AUSDEHNUNG WIRD SCHNELLER',C.aqua,1);pill(g,200,236,`TEMPO × ${deN(k,1)}`,C.text,1);}
+  if(s===4){const D=[['DUNKLE ENERGIE',68,C.purple],['DUNKLE MATERIE',27,C.blue],['NORMALE MATERIE',5,C.gold]];const cx=110,cy=125,R=90;let a0=-Math.PI/2;const f=ease(clamp(p*1.6));
+   D.forEach(([n,v,col])=>{const a1=a0+v/100*TAU*f;g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,R,a0,a1);g.closePath();g.fillStyle=hexA(col,.7);g.fill();g.strokeStyle=C.bg;g.lineWidth=2;g.stroke();a0=a1;});
+   D.forEach(([n,v,col],i)=>pill(g,225,70+i*44,`${v} % ${n}`,col,clamp(f*4-i),'left'));}}
+ ,box:{was:'Dunkle Materie ist unsichtbare Masse, die man nur über ihre Schwerkraft bemerkt. Dunkle Energie ist eine rätselhafte Kraft, die die Ausdehnung des Universums beschleunigt.',h2:'So erkennt man sie',
+ erkennen:['Galaxien drehen sich außen „zu schnell“','Galaxienhaufen halten zusammen, obwohl sichtbare Masse fehlt','Lichtablenkung (Gravitationslinsen) zeigt unsichtbare Masse','Ferne Supernovae zeigen beschleunigte Ausdehnung'],
+ bedeutung:'Alles, was wir sehen und kennen, macht nur etwa 5 % des Universums aus. Die Suche nach Dunkler Materie und Dunkler Energie ist eines der größten Rätsel der Physik.',
+ tipp:'„Dunkel“ bedeutet hier nicht schwarz, sondern unsichtbar: Sie sendet kein Licht aus und verschluckt auch keins.'}});
+
+/* ---------- SCHWARZE LÖCHER & EXTREMES ---------- */
+const RAYS=(()=>{const out=[];for(let b=-96;b<=96;b+=16){let x=-10,y=125+b,vx=2.2,vy=0;const pts=[[x,y]];let cap=false;for(let i=0;i<260;i++){const dx=200-x,dy=125-y,r=Math.hypot(dx,dy);if(r<38){cap=true;break;}const a=1400/(r*r);vx+=a*dx/r;vy+=a*dy/r;const sp=Math.hypot(vx,vy);vx=vx/sp*2.2;vy=vy/sp*2.2;x+=vx;y+=vy;pts.push([x,y]);if(x>420||y<-20||y>270)break;}out.push({pts,cap});}return out;})();
+les({id:'schwarzesloch',cat:'extrem',title:'Schwarze Löcher',sub:'Wo nicht einmal Licht entkommt',
+ steps:S([[5200,'Ein Schwarzes Loch entsteht, wenn sehr viel Masse auf sehr kleinem Raum zusammengepresst wird. Es krümmt den Raum extrem stark.'],
+ [5400,'Die Grenze heißt Ereignishorizont. Licht, das ihm zu nahe kommt, wird abgelenkt – oder verschwindet für immer.'],
+ [5400,'Gas, das hineinstürzt, kreist vorher in einer heißen, leuchtenden Scheibe: der Akkretionsscheibe. Sie kann heller strahlen als ganze Galaxien.'],
+ [6200,'Rechnen: Schwarzschild-Radius r = 2 × G × M ÷ c². Würde man die Sonne zu einem Schwarzen Loch zusammenpressen, hätte sie nur ca. 3 km Radius!'],
+ [5600,'2019 zeigte das Event Horizon Telescope das erste Bild eines Schwarzen Lochs: M87* – einen leuchtenden Ring um einen dunklen Schatten.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s===0){const k=ease(p);g.save();g.strokeStyle=hexA(C.blue,.55);g.lineWidth=1;const P=(x,y)=>{const dx=x-200,dy=y-125,d=Math.hypot(dx,dy)||1,m=k*55*Math.exp(-d*d/5000);return[x-dx/d*m,y-dy/d*m];};
+   for(let gy=5;gy<=245;gy+=16){g.beginPath();for(let gx=0;gx<=400;gx+=6){const q=P(gx,gy);gx?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}g.stroke();}
+   for(let gx=8;gx<=400;gx+=16){g.beginPath();for(let gy=0;gy<=250;gy+=6){const q=P(gx,gy);gy?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]);}g.stroke();}g.restore();
+   circ(g,200,125,4+k*14,'#000000',C.line2,1);pill(g,200,22,'MASSE KRÜMMT DEN RAUM',C.blue,1);}
+  if(s===1){stars(g,t,.4);RAYS.forEach(({pts,cap},i)=>{g.save();g.strokeStyle=hexA(cap?C.down:C.gold,.45);g.lineWidth=1.2;g.beginPath();pts.forEach((q,j)=>j?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.stroke();g.restore();const L=pathLen(pts),q=pathAt(pts,L,Math.min(L[L.length-1]-.1,(t*.09+i*31)%(L[L.length-1]+60)));circ(g,q[0],q[1],2.4,cap?C.down:C.gold);});
+   circ(g,200,125,38,'#000000');g.save();g.setLineDash([4,4]);circ(g,200,125,38,null,C.gold,1.6);g.restore();tag(g,200,163,200,236,'EREIGNISHORIZONT',C.gold,1);pill(g,330,22,'LICHT VERSCHWINDET',C.down,1);}
+  if(s===2){stars(g,t,.4);const cx=200,cy=125;glow(g,cx,cy,150,C.orange,.6);
+   const disk=back=>{for(let k=0;k<5;k++){const rx=60+k*18,ry=rx*.24;g.save();g.strokeStyle=hexA(k<2?'#fff3b0':k<4?C.gold:C.orange,.75-k*.1);g.lineWidth=7-k;g.beginPath();g.ellipse(cx,cy,rx,ry,0,back?Math.PI:0,back?TAU:Math.PI);g.stroke();g.restore();}
+    for(let i=0;i<40;i++){const[j1,j2]=GJ[i];const rx=60+j1*80,a=j2*TAU+t*.004*(140/rx);const yy=Math.sin(a);if((yy<0)!==back)continue;circ(g,cx+Math.cos(a)*rx,cy+yy*rx*.24,1.6,'#fff3b0');}};
+   disk(true);g.save();g.strokeStyle=hexA(C.gold,.7);g.lineWidth=5;g.beginPath();g.ellipse(cx,cy-6,52,46,0,Math.PI*1.08,Math.PI*1.92);g.stroke();g.restore();circ(g,cx,cy,38,'#000000');disk(false);
+   pill(g,cx,22,'AKKRETIONSSCHEIBE',C.orange,1);pill(g,cx,232,'GAS: MILLIONEN °C HEISS',C.gold,1);}
+  if(s===3){stars(g,t,.3);lines(g,[['r = 2 × G × M ÷ c²',C.text,15,1,800],['G = 6,674 × 10⁻¹¹',C.mute,12,clamp(p*4-.3)],['M = 1,989 × 10³⁰ kg (Sonne)',C.gold,12,clamp(p*4-.9)],['c = 300.000.000 m/s',C.aqua,12,clamp(p*4-1.5)],['r ≈ 2.950 m ≈ 3 km',C.up,15,clamp(p*4-2.2),800]],16,40,36);
+   const r=lerp(60,2,ease(clamp((p-.3)*1.6)));if(r>3)sun(g,322,108,r);else{circ(g,322,108,5,'#000000',C.gold,1.6);}pill(g,322,200,r>3?'SONNE: Ø 1,39 MIO. km':'SCHWARZES LOCH: Ø 6 km',r>3?C.gold:C.up,1);}
+  if(s===4){stars(g,t,.3);const cx=200,cy=118;for(let k=0;k<72;k++){const a=k*TAU/72,b=.55+.45*Math.sin(a)+.08*Math.sin(t*.003+k);g.save();g.strokeStyle=hexA(C.orange,.25*b);g.lineWidth=26;g.beginPath();g.arc(cx,cy,58,a,a+TAU/72+.02);g.stroke();g.strokeStyle=hexA('#ffd27a',.55*b);g.lineWidth=9;g.beginPath();g.arc(cx,cy,56,a,a+TAU/72+.02);g.stroke();g.restore();}
+   circ(g,cx,cy,36,C.bg==='#ffffff'?'#131a26':'#000000');pill(g,cx,22,'M87* · ERSTES FOTO 2019',C.gold,1);pill(g,cx,222,'≈ 6,5 MRD. SONNENMASSEN',C.text,1);}}
+ ,box:{was:'Ein Schwarzes Loch ist ein Gebiet, in dem die Schwerkraft so stark ist, dass nichts – nicht einmal Licht – wieder herauskommt. Seine Grenze heißt Ereignishorizont.',h2:'So erkennt man es',
+ erkennen:['Selbst unsichtbar – aber heiße Akkretionsscheibe leuchtet','Sterne kreisen um einen unsichtbaren Punkt','Licht von dahinter wird abgelenkt (Gravitationslinse)','Verschmelzungen senden Gravitationswellen aus'],
+ bedeutung:'Schwarze Löcher entstehen aus sehr schweren Sternen. Supermassereiche Schwarze Löcher mit Millionen bis Milliarden Sonnenmassen sitzen in den Zentren fast aller großen Galaxien.',
+ tipp:'Schwarze Löcher „saugen“ nicht alles ein: Würde die Sonne durch ein gleich schweres Schwarzes Loch ersetzt, würde die Erde einfach weiter auf ihrer Bahn kreisen – nur wäre es dunkel und kalt.'}});
+
+les({id:'neutronenstern',cat:'extrem',title:'Neutronensterne & Pulsare',sub:'Die dichtesten Sterne im All',
+ steps:S([[5200,'Wenn ein schwerer Stern als Supernova explodiert, wird sein Kern extrem zusammengepresst. Übrig bleibt ein Neutronenstern.'],
+ [5200,'Er hat mehr Masse als die ganze Sonne, ist aber nur rund 20 km groß – etwa so groß wie eine Stadt.'],
+ [5400,'Seine Dichte ist unvorstellbar: Ein Teelöffel (5 ml) Neutronenstern-Materie würde auf der Erde rund 2 Milliarden Tonnen wiegen.'],
+ [5800,'Viele Neutronensterne drehen sich extrem schnell und senden zwei Strahlen aus – wie ein Leuchtturm. Streift uns der Strahl, messen wir Pulse: ein Pulsar.'],
+ [5400,'Der schnellste bekannte Pulsar dreht sich 716-mal pro Sekunde. Pulsare ticken so gleichmäßig wie sehr gute Uhren.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.4);const cx=s<3?150:120,cy=125;
+  if(s===0){const r=lerp(80,12,ease(p));sun(g,200,cy,r,1,'#a9c1ff','#4c7dff');for(let k=0;k<8;k++){const a=k*TAU/8;arrow(g,200+Math.cos(a)*(r+40),cy+Math.sin(a)*(r+40),200+Math.cos(a)*(r+12),cy+Math.sin(a)*(r+12),C.gold,2,1-p*.5);}if(p>.8)glow(g,200,cy,60,'#ffffff',(p-.8)*5);pill(g,200,22,'KERN STÜRZT ZUSAMMEN',C.blue,1);}
+  if(s===1){sun(g,470,cy,210);starDot(g,cx,cy,7,'#cfe0ff');arrow(g,cx-30,cy+40,cx+30,cy+40,C.mute,1.4,1,true);pill(g,cx,cy+58,'Ø ≈ 20 km',C.text,1);pill(g,cx,40,'> 1,4 SONNENMASSEN',C.blue,1);pill(g,330,232,'SONNE: Ø 1,39 MIO. km',C.gold,1);}
+  if(s===2){g.save();g.translate(150,110);g.rotate(-.25);box(g,-6,-4,110,8,C.metal2,C.metalHi,4,1.2);g.beginPath();g.ellipse(-30,0,34,20,0,0,TAU);g.fillStyle=C.metal2;g.fill();g.strokeStyle=C.metalHi;g.lineWidth=1.4;g.stroke();g.beginPath();g.ellipse(-30,-2,26,13,0,0,TAU);g.fillStyle=hexA('#cfe0ff',.9);g.fill();g.restore();glow(g,120,117,30,C.blue,.8+.2*Math.sin(t*.008));
+   pill(g,120,170,'5 ml',C.text,1);box(g,280,100,90,64,hexA(C.down,.25),C.down,8,1.6);txt(g,325,125,'2 MRD.',C.down,15,'center',800);txt(g,325,146,'TONNEN',C.down,11,'center',700);arrow(g,180,132,272,132,C.mute,1.6,clamp(p*3));}
+  if(s>=3){const w=s===4?.02:.0045,ph=t*w;[0,Math.PI].forEach(o=>{const a=ph+o;g.save();g.globalAlpha=.55;const gr=g.createLinearGradient(cx,cy,cx+Math.cos(a)*230,cy+Math.sin(a)*230);gr.addColorStop(0,hexA(C.aqua,.9));gr.addColorStop(1,hexA(C.aqua,0));g.fillStyle=gr;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a-.12)*230,cy+Math.sin(a-.12)*230);g.lineTo(cx+Math.cos(a+.12)*230,cy+Math.sin(a+.12)*230);g.closePath();g.fill();g.restore();});
+   starDot(g,cx,cy,9,'#cfe0ff');const hit=Math.cos(ph)>.985||Math.cos(ph+Math.PI)>.985;earth(g,360,cy,9);if(Math.cos(ph)>.97)glow(g,360,cy,24,C.aqua,1);
+   const x0=230,y0=228,w2=150;line(g,x0,y0,x0+w2,y0,C.line2,1);g.save();g.strokeStyle=C.aqua;g.lineWidth=1.6;g.beginPath();for(let i=0;i<=w2;i++){const tt=t-(w2-i)*(s===4?3:18);const v=Math.max(0,Math.cos(tt*w)-.97)/.03;const y=y0-v*26;i?g.lineTo(x0+i,y):g.moveTo(x0+i,y);}g.stroke();g.restore();
+   pill(g,305,180,'PULSE',C.aqua,1);pill(g,8,22,s===4?'716 × PRO SEKUNDE':'PULSAR = KOSMISCHER LEUCHTTURM',C.aqua,1,'left');}}
+ ,box:{was:'Ein Neutronenstern ist der extrem dichte Rest eines explodierten Sterns. Er besteht fast nur aus Neutronen, die so eng gepackt sind wie in einem Atomkern.',h2:'So erkennst du ihn',
+ erkennen:['Masse: ca. 1,4 bis 2 Sonnenmassen','Durchmesser: nur rund 20 km','Dreht sich oft viele Male pro Sekunde','Pulsar: zwei Strahlen wie ein Leuchtturm'],
+ bedeutung:'Pulsare sind kosmische Präzisionsuhren. Mit ihnen werden sogar Gravitationswellen gesucht – und 1993 gab es den Nobelpreis für den Nachweis von Gravitationswellen-Effekten an einem Pulsar-Doppelsystem.',
+ tipp:'Der erste Pulsar wurde 1967 von Jocelyn Bell entdeckt. Weil die Signale so regelmäßig waren, nannte man ihn scherzhaft „LGM-1“ – „Little Green Men“.'}});
+
+les({id:'gravitationswellen',thumb:2,cat:'extrem',title:'Gravitationswellen',sub:'Wenn der Raum zittert',
+ steps:S([[5200,'Albert Einstein sagte voraus: Bewegen sich riesige Massen, entstehen Wellen im Raum selbst – Gravitationswellen.'],
+ [5400,'Zwei Schwarze Löcher umkreisen sich. Sie verlieren dabei Energie, kommen sich immer näher und werden immer schneller.'],
+ [5400,'Beim Verschmelzen entsteht ein kurzer, starker Wellen-„Zirpser“ (Chirp). Er breitet sich mit Lichtgeschwindigkeit aus.'],
+ [6000,'Der Detektor LIGO misst mit Laserstrahlen in 4 km langen Armen winzigste Längenänderungen – tausendmal kleiner als ein Proton.'],
+ [5400,'Am 14. September 2015 wurde so erstmals eine Gravitationswelle gemessen. Dafür gab es 2017 den Physik-Nobelpreis.']]),
+ draw(g,st){const{s,p,t}=st;
+  const wave=(cx,cy,amp)=>{g.save();g.strokeStyle=hexA(C.blue,.5);g.lineWidth=1;for(let gy=5;gy<=245;gy+=15){g.beginPath();for(let gx=0;gx<=400;gx+=5){const d=Math.hypot(gx-cx,gy-cy);const y=gy+Math.sin(d*.09-t*.006)*amp*Math.exp(-d/260);gx?g.lineTo(gx,y):g.moveTo(gx,y);}g.stroke();}g.restore();};
+  if(s===0){wave(200,125,6*ease(p)+1);pill(g,200,22,'DER RAUM SCHWINGT',C.blue,1);}
+  if(s===1||s===2){wave(200,110,s===1?3+p*3:6*(1-p*.6));let d,ph;if(s===1){d=lerp(80,36,ease(p));ph=integ(tt=>.004*Math.pow(80/lerp(80,36,ease(tt/st.d)),1.5),st.T,40);}else{d=36*(1-clamp(p*2.5));ph=t*.03;}
+   if(d>2){[0,Math.PI].forEach(o=>{const x=200+Math.cos(ph+o)*d/2,y=110+Math.sin(ph+o)*d/2*.5;glow(g,x,y,16,C.orange,.6);circ(g,x,y,8,'#000000',C.orange,1.4);});}else{glow(g,200,110,26,C.orange,.7);circ(g,200,110,11,'#000000',C.orange,1.6);}
+   const x0=20,y0=222,w=360;g.save();g.strokeStyle=C.aqua;g.lineWidth=1.8;g.beginPath();const up=s===1?.6*p:.6+.4*clamp(p*1.4);for(let i=0;i<=w*up;i++){const u=i/w;let A,f;if(u<.75){A=4+Math.pow(u/.75,3)*20;f=6+Math.pow(u/.75,3)*40;}else{A=24*Math.exp(-(u-.75)*14);f=46;}const y=y0+Math.sin(u*f*2.2)*A*.55;i?g.lineTo(x0+i,y):g.moveTo(x0+i,y);}g.stroke();g.restore();
+   pill(g,200,22,s===1?'SPIRALE: IMMER NÄHER, IMMER SCHNELLER':'VERSCHMELZUNG → CHIRP',C.orange,1);}
+  if(s===3){const cx=80,cy=200,L1=280,L2=170,dl=Math.sin(t*.008)*5;box(g,cx-14,cy-14,28,28,C.head,C.gold,4);
+   line(g,cx,cy,cx+L1+dl,cy,hexA(C.down,.5),3);line(g,cx,cy,cx,cy-L2-dl,hexA(C.down,.5),3);box(g,cx+L1+dl,cy-12,6,24,C.metalHi,null,1);box(g,cx-12,cy-L2-dl-6,24,6,C.metalHi,null,1);
+   for(let i=0;i<8;i++){const f=(t*.0012+i/8)%1;circ(g,cx+f*(L1+dl),cy,2,C.down);circ(g,cx,cy-f*(L2+dl),2,C.down);}
+   pill(g,cx+L1/2,cy+22,'ARM 4 km',C.text,1);pill(g,cx+70,cy-L2/2,'ARM 4 km',C.text,1,'left');pill(g,cx,cy+28,'LASER',C.gold,1);pill(g,290,40,'< 1/1.000 PROTON',C.down,1);}
+  if(s===4){stars(g,t,.3);lines(g,[['14. SEPTEMBER 2015',C.gold,18,1,800],['GW150914',C.aqua,13,clamp(p*3-.3)],['2 Schwarze Löcher, 1,3 Mrd. LJ entfernt',C.text,12,clamp(p*3-.8)],['PHYSIK-NOBELPREIS 2017',C.up,14,clamp(p*3-1.4),800]],28,60,38);}}
+ ,box:{was:'Gravitationswellen sind winzige Verformungen des Raums, die sich mit Lichtgeschwindigkeit ausbreiten. Sie entstehen, wenn sehr schwere Massen beschleunigt werden.',h2:'So misst man sie',
+ erkennen:['Laser läuft durch zwei lange Arme','Spiegel an den Enden reflektieren','Welle staucht einen Arm, dehnt den anderen','Mehrere Detektoren weltweit bestätigen das Signal'],
+ bedeutung:'Gravitationswellen sind ein neues „Sinnesorgan“ für die Astronomie: Wir können Ereignisse „hören“, die kein Licht aussenden – zum Beispiel verschmelzende Schwarze Löcher.',
+ tipp:'Die Längenänderung ist so winzig, dass schon ein vorbeifahrender Lkw stören könnte. Deshalb stehen die Spiegel auf aufwendig schwingungsgedämpften Aufhängungen.'}});
+
+les({id:'zeit',thumb:3,cat:'extrem',title:'Zeit & Schwerkraft',sub:'Warum Uhren im All anders ticken',
+ steps:S([[4800,'Albert Einstein entdeckte: Zeit vergeht nicht überall gleich schnell. Sie hängt von Geschwindigkeit und Schwerkraft ab.'],
+ [5200,'Schnelle Bewegung bremst die Zeit: Eine Uhr in einem sehr schnellen Raumschiff tickt langsamer als auf der Erde.'],
+ [5200,'Auch starke Schwerkraft bremst die Zeit: Am Boden vergeht die Zeit minimal langsamer als hoch oben auf einem Berg.'],
+ [5600,'GPS-Satelliten müssen das berücksichtigen: Ihre Uhren gehen insgesamt rund 38 Mikrosekunden pro Tag vor.'],
+ [6000,'Rechnen: Ohne Korrektur: 0,000038 s × 300.000 km/s ≈ 11,4 km Fehler – jeden Tag! Dein Navi wäre nach einem Tag völlig unbrauchbar.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s===0){clock(g,130,115,52,t*.003,C.blue,'HIER');clock(g,280,115,52,t*.003,C.gold,'DORT');pill(g,205,22,'ZEIT IST RELATIV',C.text,1);}
+  if(s===1){stars(g,t,.4,.08);earth(g,60,190,24);clock(g,90,90,40,t*.003,C.blue,'ERDE');g.save();g.translate(300,130);g.rotate(Math.PI/2);rocket(g,0,40,110,{flame:1,t,w:.18});g.restore();clock(g,300,60,34,t*.0016,C.gold,'RAUMSCHIFF');pill(g,300,215,'SCHNELL → LANGSAMERE ZEIT',C.gold,1);}
+  if(s===2){stars(g,t,.3);earth(g,200,380,240,{rot:0});poly(g,[[250,145],[320,40],[390,145]],hexA(C.mute,.4),C.mute,1.4);clock(g,110,110,32,t*.0026,C.blue,'UNTEN: LANGSAMER');clock(g,320,56,26,t*.0032,C.gold,'');pill(g,320,100,'OBEN: SCHNELLER',C.gold,1);}
+  if(s===3){stars(g,t,.3);earth(g,170,125,46,{rot:t*.0003});g.save();g.strokeStyle=hexA(C.mute,.4);g.setLineDash([3,4]);circ(g,170,125,98,null,hexA(C.mute,.4),1);g.restore();
+   for(let k=0;k<3;k++){const a=t*.0006+k*TAU/3,x=170+Math.cos(a)*98,y=125+Math.sin(a)*98;box(g,x-3,y-3,6,6,C.metalHi,null,1);box(g,x-12,y-1.5,7,3,C.orange,null,1);box(g,x+5,y-1.5,7,3,C.orange,null,1);}
+   pill(g,330,60,'GPS · 20.200 km',C.text,1);pill(g,330,100,'+ 38 µs PRO TAG',C.gold,1);}
+  if(s===4){lines(g,[['0,000038 s',C.gold,14,1,800],['× 300.000 km/s',C.text,13,clamp(p*3-.3)],['≈ 11,4 km / TAG',C.down,16,clamp(p*3-1),800]],20,60,40);
+   const d=ease(clamp(p*1.3))*120;box(g,200,40,190,180,C.card2,C.line2,8);for(let i=0;i<5;i++)line(g,200,70+i*34,390,60+i*36,hexA(C.mute,.4),2);line(g,240,40,280,220,hexA(C.mute,.4),3);
+   circ(g,250,170,6,C.up,C.bg,2);pill(g,250,192,'HIER',C.up,1);circ(g,250+d*.9,170-d*.9,6,C.down,C.bg,2);if(d>10){line(g,250,170,250+d*.9,170-d*.9,C.down,1.2,[3,3]);pill(g,250+d*.9,148-d*.9,'NAVI',C.down,1);}}}
+ ,box:{was:'Nach Einsteins Relativitätstheorie vergeht die Zeit langsamer, wenn man sich schnell bewegt oder in starker Schwerkraft ist. Das nennt man Zeitdilatation.',h2:'So erkennt man es',
+ erkennen:['<b>Geschwindigkeit:</b> schnelle Uhren gehen nach','<b>Schwerkraft:</b> Uhren im Tal gehen nach','GPS: Satellitenuhren gehen in Summe ca. 38 µs/Tag vor','Mit Atomuhren im Flugzeug nachgemessen'],
+ bedeutung:'Was nach Science-Fiction klingt, ist Alltag: Ohne Relativitätstheorie würden GPS, Google Maps und Navi nicht funktionieren.',
+ tipp:'Astronauten auf der ISS altern ein kleines bisschen langsamer: Nach fast einem Jahr im All sind sie nur wenige Tausendstelsekunden „jünger“ als zu Hause.'}});
+
+/* ---------- RAUMFAHRT ---------- */
+les({id:'rakete',cat:'raumfahrt',title:'So fliegt eine Rakete',sub:'Rückstoß, Treibstoff und Stufen',
+ steps:S([[5200,'Eine Rakete funktioniert nach dem Rückstoßprinzip: Sie stößt heißes Gas mit hoher Geschwindigkeit nach unten aus – und wird dadurch nach oben gedrückt.'],
+ [5000,'Wie bei einem losgelassenen Luftballon. Die Rakete braucht dafür keine Luft zum Abstoßen – sie funktioniert auch im luftleeren Weltraum.'],
+ [5400,'Sie muss ihren Sauerstoff selbst mitnehmen, denn im All gibt es keinen. Treibstoff und Sauerstoff verbrennen in der Brennkammer.'],
+ [5400,'Große Raketen bestehen aus Stufen. Ist eine Stufe leer, wird sie abgeworfen – so muss kein unnötiges Gewicht mitgeschleppt werden.'],
+ [5600,'Rund 90 % der Startmasse einer großen Rakete sind Treibstoff. Die eigentliche Nutzlast macht nur wenige Prozent aus.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s===0){const lift=ease(clamp((p-.25)*1.4))*90;ground(g,226);stars(g,t,.3);rocket(g,200,222-lift,150,{flame:p>.1?1:p*10,t,stages:[.5]});
+   for(let i=0;i<10;i++){const f=(t*.002+i/10)%1;circ(g,200+(i%2?1:-1)*f*60,226-lift+f*10+(lift>5?f*30:0),3+f*8,hexA(C.exhaust,.4*(1-f)));}
+   arrow(g,280,150-lift,280,100-lift,C.up,4,1);pill(g,330,90-lift*.5,'SCHUB ↑',C.up,1);arrow(g,120,200,120,240,C.fire,4,1);pill(g,70,200,'GAS ↓',C.fire,1);}
+  if(s===1){stars(g,t,.6);const x=80+((t*.06)%260);g.save();g.translate(x,120);g.fillStyle=hexA(C.down,.8);g.beginPath();g.ellipse(0,0,34,26,0,0,TAU);g.fill();poly(g,[[-34,0],[-44,-6],[-44,6]],C.down);g.restore();for(let i=0;i<6;i++){const f=(t*.003+i/6)%1;circ(g,x-48-f*50,120+((i%3)-1)*6,3,hexA(C.aqua,1-f));}
+   pill(g,200,22,'WIE EIN LUFTBALLON',C.down,1);pill(g,200,232,'FUNKTIONIERT AUCH IM VAKUUM',C.text,1);}
+  if(s===2){const x=150,w=70;box(g,x-w/2,40,w,160,C.body,C.bodyLine,6);poly(g,[[x-w/2,40],[x,8],[x+w/2,40]],C.body,C.bodyLine,1.4);box(g,x-w/2+6,50,w-12,60,hexA(C.blue,.35),C.blue,4);box(g,x-w/2+6,118,w-12,66,hexA(C.orange,.35),C.orange,4);poly(g,[[x-14,200],[x-24,232],[x+24,232],[x+14,200]],C.metal2,C.metalHi,1.4);
+   flow(g,[[x-12,110],[x-12,196]],t,C.blue,{gap:10,speed:.05,r:2});flow(g,[[x+12,184],[x+12,196]],t,C.orange,{gap:6,speed:.05,r:2});glow(g,x,212,18,C.fire2,1);
+   tag(g,x+w/2,80,300,60,'SAUERSTOFF',C.blue,1);tag(g,x+w/2,150,300,130,'TREIBSTOFF',C.orange,1);tag(g,x+18,216,300,200,'BRENNKAMMER & DÜSE',C.fire,1);}
+  if(s===3){stars(g,t,.6,.02);const f=ease(p);g.save();g.translate(200,90-f*30);rocket(g,0,40,80,{flame:p>.25?1:0,t,stages:[]});g.restore();g.save();g.translate(200,180+f*60);g.rotate(f*.6);box(g,-11,-40,22,80,C.body,C.bodyLine,2,1.4);poly(g,[[-11,30],[-24,40],[-11,40]],C.down);poly(g,[[11,30],[24,40],[11,40]],C.down);g.restore();
+   pill(g,320,60,'2. STUFE',C.up,1);pill(g,320,200,'1. STUFE (LEER)',C.mute,1);pill(g,80,22,'STUFENTRENNUNG',C.gold,1);}
+  if(s===4){const x=70,y0=228,H=176,f=ease(clamp(p*1.4));const parts=[['TREIBSTOFF ≈ 90 %',.9,C.orange,140],['STRUKTUR & TRIEBWERKE ≈ 6 %',.06,C.metal,74],['NUTZLAST ≈ 4 %',.04,C.up,40]];let y=y0;parts.forEach(([n,v,col,ly],i)=>{const hh=H*v*f;box(g,x,y-hh,80,hh,hexA(col,.6),col,2);tag(g,x+80,y-hh/2,170,ly,n,col,clamp(f*3-i),'left');y-=hh;});pill(g,x+40,236,'STARTMASSE',C.text,1);}}
+ ,box:{was:'Eine Rakete bewegt sich, indem sie Masse (heißes Gas) mit hoher Geschwindigkeit nach hinten ausstößt. Die Gegenkraft schiebt sie nach vorne – das ist Newtons drittes Gesetz.',h2:'So funktioniert’s',
+ erkennen:['Rückstoß: Gas nach unten, Rakete nach oben','Nimmt eigenen Sauerstoff (Oxidator) mit','Mehrere Stufen werden nacheinander abgeworfen','Rund 90 % der Masse sind Treibstoff'],
+ bedeutung:'Um ins All zu kommen, muss eine Rakete enorm schnell werden. Deshalb besteht sie fast nur aus Treibstoff – und deshalb sind wiederverwendbare Stufen so wertvoll.',
+ tipp:'Moderne Raketen wie die Falcon 9 landen ihre erste Stufe wieder senkrecht – auf einem Landeplatz oder einem Schiff im Meer – und fliegen sie erneut.'}});
+
+const ORB=(()=>{const cx=200,cy=150,r0=94,GM=r0;return[.74,.9,1,1.45].map(vf=>{let x=cx,y=cy-r0,vx=vf,vy=0;const pts=[[x,y]];for(let i=0;i<1400;i++){const dx=cx-x,dy=cy-y,r=Math.hypot(dx,dy);if(r<80)break;const a=GM/(r*r);vx+=a*dx/r*.6;vy+=a*dy/r*.6;x+=vx*.6;y+=vy*.6;if(i%3===0)pts.push([x,y]);if(x<-30||x>430||y<-30||y>280)break;if(vf===1&&i>30&&Math.hypot(x-cx,y-(cy-r0))<1.2)break;}return pts;});})();
+les({id:'umlaufbahn',cat:'raumfahrt',title:'Die Umlaufbahn',sub:'Fallen und trotzdem vorbeifliegen',
+ steps:S([[5000,'Newtons Gedankenexperiment: Eine Kanone auf einem extrem hohen Berg schießt eine Kugel waagrecht ab. Sie fällt im Bogen zu Boden.'],
+ [4600,'Schießt man schneller, fliegt die Kugel weiter, bevor sie aufschlägt.'],
+ [6000,'Bei rund 7,9 km/s fällt die Kugel genauso schnell, wie sich die Erdoberfläche unter ihr wegkrümmt – sie fällt ewig um die Erde herum!'],
+ [5600,'Das ist eine Umlaufbahn. Astronauten schweben, weil sie zusammen mit ihrer Station ständig „fallen“ – nicht, weil es dort keine Schwerkraft gäbe.'],
+ [5000,'Noch schneller, ab 11,2 km/s, entkommt man der Erde ganz: Das ist die Fluchtgeschwindigkeit.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.4);const cx=200,cy=150;earth(g,cx,cy,80,{la:-Math.PI*.7});poly(g,[[186,72],[200,54],[214,72]],C.metal2,C.metalHi,1.2);box(g,198,50,12,4,C.metalHi,null,1);
+  const drawP=(k,up,col,a=1)=>{const P=ORB[k],n=Math.max(1,Math.floor(P.length*up));g.save();g.globalAlpha=a;g.strokeStyle=col;g.lineWidth=2;g.setLineDash([5,4]);g.beginPath();for(let i=0;i<n;i++)i?g.lineTo(P[i][0],P[i][1]):g.moveTo(P[i][0],P[i][1]);g.stroke();g.restore();const q=P[n-1];if(a>.9)circ(g,q[0],q[1],4,col,C.bg,1.4);};
+  if(s===0){drawP(0,ease(p),C.down);pill(g,330,40,'LANGSAM: FÄLLT RUNTER',C.down,1);}
+  if(s===1){drawP(0,1,C.down,.35);drawP(1,ease(p),C.orange);pill(g,330,40,'SCHNELLER: WEITER',C.orange,1);}
+  if(s===2){drawP(0,1,C.down,.3);drawP(1,1,C.orange,.3);drawP(2,ease(clamp(p*1.2)),C.up);pill(g,330,24,'7,9 km/s: UMLAUFBAHN!',C.up,1);}
+  if(s===3){drawP(2,1,C.up,.35);const P=ORB[2],L=pathLen(P),q=pathAt(P,L,t*.05);issDraw(g,q[0],q[1],.22);pill(g,330,24,'SCHWEBEN = FREIER FALL',C.up,1);}
+  if(s===4){drawP(2,1,C.up,.3);drawP(3,ease(p),C.purple);pill(g,330,24,'11,2 km/s: FLUCHT!',C.purple,1);}}
+ ,box:{was:'Eine Umlaufbahn (Orbit) ist ein ständiger freier Fall um einen Himmelskörper. Das Raumfahrzeug ist so schnell, dass es immer an der Erde „vorbeifällt“.',h2:'So erkennst du es',
+ erkennen:['Zu langsam: Absturz','Ca. 7,9 km/s (28.000 km/h): Kreisbahn knapp über der Erde','Zwischen 7,9 und 11,2 km/s: Ellipsenbahn','Ab 11,2 km/s: Flucht von der Erde'],
+ bedeutung:'In 400 km Höhe ist die Schwerkraft noch rund 90 % so stark wie am Boden. Schwerelosigkeit entsteht nur, weil Station und Astronauten gemeinsam fallen.',
+ tipp:'Je höher die Umlaufbahn, desto langsamer: Die ISS braucht 92 Minuten für eine Runde, der Mond in 384.000 km Entfernung braucht rund 27 Tage.'}});
+
+les({id:'iss',thumb:1,cat:'raumfahrt',title:'Die Raumstation ISS',sub:'Ein Labor über unseren Köpfen',
+ steps:S([[5200,'Die Internationale Raumstation ISS kreist in rund 400 km Höhe um die Erde. Seit November 2000 leben dort ununterbrochen Astronauten.'],
+ [5000,'Sie ist etwa so groß wie ein Fußballfeld (rund 109 m breit) und wiegt etwa 420 Tonnen.'],
+ [5200,'Riesige Solarflügel liefern den Strom. Module aus verschiedenen Ländern bilden die Wohn- und Laborräume.'],
+ [5200,'Die ISS fliegt mit rund 28.000 km/h – und umrundet die Erde in etwa 92 Minuten.'],
+ [6000,'Rechnen: 24 h = 1.440 Minuten. 1.440 ÷ 92 ≈ 15,7. Die Crew erlebt also rund 16 Sonnenaufgänge und 16 Sonnenuntergänge pro Tag!']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);
+  if(s===0){g.save();g.beginPath();g.arc(200,640,480,0,TAU);g.fillStyle=C.earth;g.fill();g.restore();g.save();g.strokeStyle=hexA(C.aqua,.6);g.lineWidth=5;g.beginPath();g.arc(200,640,484,0,TAU);g.stroke();g.restore();
+   const x=lerp(60,340,(t*.00008)%1);issDraw(g,x,60,.5);arrow(g,x,82,x,156,C.gold,1.6,1,true);pill(g,x+12,120,'400 km',C.gold,1,'left');pill(g,200,232,'BEWOHNT SEIT NOV. 2000',C.text,1);}
+  if(s===1){issDraw(g,200,110,2.6);arrow(g,200-56*2.6,200,200+56*2.6,200,C.mute,1.4,1,true);pill(g,200,200,'≈ 109 m',C.text,1);pill(g,200,22,'SO GROSS WIE EIN FUSSBALLFELD',C.up,1);pill(g,200,232,'≈ 420 TONNEN',C.gold,1);}
+  if(s===2){issDraw(g,200,120,2.6);tag(g,200+40*2.6,120-20*2.6,330,22,'SOLARFLÜGEL',C.orange,1);tag(g,200,120+20*2.6,200,232,'MODULE',C.text,1);tag(g,200-54*2.6,120,60,22,'GITTERSTRUKTUR',C.metalHi,1);}
+  if(s===3){earth(g,200,125,62,{rot:t*.0002});g.save();g.strokeStyle=hexA(C.aqua,.5);g.setLineDash([3,4]);circ(g,200,125,82,null,hexA(C.aqua,.5),1);g.restore();const f=(t*.00012)%1,a=f*TAU-Math.PI/2;issDraw(g,200+Math.cos(a)*82,125+Math.sin(a)*82,.16);
+   pill(g,330,24,'28.000 km/h',C.aqua,1);pill(g,70,232,`${Math.floor(f*92)} / 92 MIN`,C.gold,1);}
+  if(s===4){lines(g,[['24 h = 1.440 Minuten',C.text,13,1],['1.440 ÷ 92 ≈ 15,7',C.aqua,14,clamp(p*3-.4),800],['≈ 16 Sonnenaufgänge',C.gold,13,clamp(p*3-1.1)],['pro Tag!',C.gold,13,clamp(p*3-1.1)]],18,60,36);
+   const cx=300,cy=125;earth(g,cx,cy,40,{la:0});g.save();g.strokeStyle=hexA(C.aqua,.5);circ(g,cx,cy,58,null,hexA(C.aqua,.5),1);g.restore();sun(g,412,125,14);const a=t*.002,ix=cx+Math.cos(a)*58,iy=cy+Math.sin(a)*58;const day=Math.cos(a)>-.25;circ(g,ix,iy,4,day?C.gold:C.mute,C.bg,1.4);pill(g,cx,206,day?'TAG':'NACHT',day?C.gold:C.mute,1);}}
+ ,box:{was:'Die ISS ist ein gemeinsames Weltraumlabor von USA, Russland, Europa, Japan und Kanada. Astronauten forschen dort monatelang in Schwerelosigkeit.',h2:'So erkennst du sie',
+ erkennen:['Höhe: ca. 400 km','Tempo: ca. 28.000 km/h','Eine Erdumrundung: ca. 92 Minuten','Am Himmel: heller, nicht blinkender Punkt, der in wenigen Minuten vorbeizieht'],
+ bedeutung:'Auf der ISS wird erforscht, wie Menschen, Pflanzen und Materialien sich in Schwerelosigkeit verhalten – wichtig für lange Reisen zum Mond und zum Mars.',
+ tipp:'Du kannst die ISS mit bloßem Auge sehen! Apps oder die NASA-Seite „Spot the Station“ sagen dir, wann sie über Niederbayern fliegt – meist kurz nach Sonnenuntergang oder vor Sonnenaufgang.'}});
+
+les({id:'mondlandung',cat:'raumfahrt',title:'Mondlandung',sub:'Apollo 11 und die Rückkehr zum Mond',
+ steps:S([[5400,'Im Juli 1969 landete Apollo 11 auf dem Mond. Neil Armstrong betrat als erster Mensch die Mondoberfläche, kurz danach Buzz Aldrin.'],
+ [5000,'Die Saturn V war die stärkste Rakete ihrer Zeit: rund 110 m hoch und beim Start fast 3.000 Tonnen schwer.'],
+ [5400,'Die Reise zum Mond (rund 384.000 km) dauerte etwa drei Tage. Die Mondfähre landete, die Kommandokapsel wartete in der Mondumlaufbahn.'],
+ [5800,'Zwischen 1969 und 1972 betraten zwölf Astronauten den Mond. Dort wiegst du nur ein Sechstel: Aus 90 kg werden gefühlte 15 kg.'],
+ [5400,'Mit dem Artemis-Programm will die NASA wieder Menschen zum Mond bringen – diesmal auch in die Nähe des Südpols, wo Wassereis vermutet wird.']]),
+ draw(g,st){const{s,p,t}=st;
+  const surf=()=>{g.fillStyle=hexA(C.metal,.45);g.fillRect(0,196,400,60);[[60,212,18],[150,230,10],[300,220,22],[370,206,8]].forEach(([x,y,r])=>{g.beginPath();g.ellipse(x,y,r,r*.3,0,0,TAU);g.fillStyle=hexA(C.metal3,.6);g.fill();});};
+  const lander=(x,y,fl)=>{g.save();g.translate(x,y);line(g,-16,-8,-26,8,C.metalHi,1.6);line(g,16,-8,26,8,C.metalHi,1.6);box(g,-16,-20,32,14,hexA(C.gold,.75),C.gold,2);poly(g,[[-11,-20],[-13,-36],[0,-42],[13,-36],[11,-20]],C.body,C.bodyLine,1.2);if(fl)glow(g,0,-2,14*fl,C.fire2,1);g.restore();};
+  if(s===0){stars(g,t,.6);surf();earth(g,330,50,16,{la:Math.PI});const f=ease(clamp(p*1.4));lander(180,lerp(60,198,f),f<1?1:0);if(f>=1){line(g,250,198,250,160,C.metalHi,1.4);box(g,250,160,24,15,hexA(C.blue,.6),C.blue,1);}pill(g,90,22,'APOLLO 11 · 1969',C.gold,1);}
+  if(s===1){stars(g,t,.3);ground(g,236);rocket(g,200,234,220,{w:.07,stages:[.38,.62,.78],flame:0});arrow(g,140,234,140,14,C.mute,1.4,1,true);pill(g,110,125,'110 m',C.text,1);pill(g,300,90,'≈ 2.950 t',C.gold,1);pill(g,300,130,'≈ 36 STOCKWERKE',C.mute,1);}
+  if(s===2){stars(g,t,.5);earth(g,42,125,22);planet(g,355,125,8,'#9aa3ad',{craters:1});const pts=[];for(let i=0;i<=40;i++){const u=i/40;pts.push([lerp(62,340,u),125-Math.sin(u*Math.PI)*62]);}for(let i=0;i<=20;i++){const a=Math.PI+i/20*TAU*.9;pts.push([355+Math.cos(a)*18,125-Math.sin(a)*18]);}for(let i=0;i<=40;i++){const u=i/40;pts.push([lerp(345,62,u),125+Math.sin(u*Math.PI)*62]);}
+   g.save();g.strokeStyle=hexA(C.aqua,.6);g.setLineDash([4,4]);g.lineWidth=1.4;g.beginPath();pts.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.stroke();g.restore();const L=pathLen(pts),q=pathAt(pts,L,ease(p)*L[L.length-1]*.999);circ(g,q[0],q[1],4,C.gold,C.bg,1.4);
+   pill(g,200,22,'384.000 km · ≈ 3 TAGE',C.aqua,1);pill(g,355,152,'MOND',C.mute,1);}
+  if(s===3){stars(g,t,.3);const sc=(x,lab,kg,col)=>{box(g,x-55,150,110,24,C.head,C.line2,6);box(g,x-30,120,60,30,C.card2,col,6,1.6);txt(g,x,135,kg,col,15,'center',800);pill(g,x,192,lab,col,1);};
+   sc(110,'ERDE','90 kg',C.earth);sc(290,'MOND',`${Math.round(lerp(90,15,ease(clamp(p*1.4))))} kg`,C.gold);pill(g,200,40,'12 MENSCHEN AUF DEM MOND',C.text,1);pill(g,200,232,'MOND-SCHWERKRAFT: 1/6',C.gold,1);}
+  if(s===4){stars(g,t,.5);planet(g,200,118,92,'#9aa3ad',{craters:1,la:-Math.PI*.8});glow(g,200,206,22,C.aqua,.7+.3*Math.sin(t*.005));circ(g,200,206,4,C.aqua);tag(g,200,206,320,220,'SÜDPOL: WASSEREIS?',C.aqua,1);pill(g,70,22,'ARTEMIS',C.gold,1);}}
+ ,box:{was:'Mit dem Apollo-Programm der NASA landeten zwischen 1969 und 1972 sechs Mal Menschen auf dem Mond. Mit Artemis sollen wieder Menschen dorthin fliegen.',h2:'So lief es ab',
+ erkennen:['<b>Saturn V:</b> dreistufige Mondrakete','<b>Kommandokapsel:</b> bleibt im Mondorbit','<b>Mondfähre:</b> landet mit zwei Astronauten','Rückflug: Kapsel landet im Meer'],
+ bedeutung:'Die Astronauten brachten insgesamt rund 382 kg Mondgestein mit. Es zeigte unter anderem, dass der Mond wahrscheinlich aus einem riesigen Zusammenstoß mit der jungen Erde entstand.',
+ tipp:'Die Fußabdrücke der Astronauten sind noch heute da: Auf dem Mond gibt es weder Wind noch Regen, der sie verwischen könnte.'}});
+
+/* ---------- BEOBACHTEN & MESSEN ---------- */
+les({id:'teleskop',cat:'beobachten',title:'Teleskope',sub:'Linsen, Spiegel und Lichtsammeln',
+ steps:S([[5200,'Ein Teleskop ist vor allem ein Lichtsammler: Je größer seine Öffnung, desto mehr Licht fängt es ein – und desto schwächere Objekte kann es zeigen.'],
+ [5400,'Linsenteleskop (Refraktor): Eine große Linse vorne bündelt das Licht im Brennpunkt. Das Okular vergrößert dieses Bild für dein Auge.'],
+ [5600,'Spiegelteleskop (Reflektor): Ein gewölbter Hauptspiegel bündelt das Licht. Große Forschungsteleskope sind fast immer Spiegelteleskope.'],
+ [6200,'Rechnen: Die Lichtmenge wächst mit dem Quadrat des Durchmessers. Ein 8-m-Spiegel sammelt (8.000 mm ÷ 7 mm)² ≈ 1,3 Mio.-mal mehr Licht als dein Auge!'],
+ [5600,'Vergrößerung = Brennweite des Objektivs ÷ Brennweite des Okulars. Beispiel: 1.000 mm ÷ 10 mm = 100-fach.']]),
+ draw(g,st){const{s,p,t}=st;
+  if(s===0){stars(g,t,.3);[[100,10,'AUGE',C.mute],[280,60,'TELESKOP',C.gold]].forEach(([x,r,n,col])=>{circ(g,x,140,r,hexA(col,.15),col,2);for(let i=0;i<30;i++){const[j1,j2]=GJ[i+(x>200?40:0)];const xx=x+(j1-.5)*130,f=(t*.0009+j2)%1,yy=lerp(10,140,f);if(Math.abs(xx-x)<r)circ(g,xx,yy,2,C.gold);else circ(g,xx,yy,1.6,hexA(C.mute,.4));}pill(g,x,140+r+16,n,col,1);});pill(g,200,236,'GRÖSSER = MEHR LICHT',C.up,1);}
+  if(s===1){const ys=[95,110,125,140,155];ys.forEach((y,i)=>{const f=(t*.0008+i*.13)%1;line(g,10,y,110,y,hexA(C.gold,.6),1.4);line(g,110,y,300,125,hexA(C.gold,.6),1.4);line(g,300,125,340,125-(y-125)*.25,hexA(C.gold,.4),1.2);});
+   g.save();g.beginPath();g.ellipse(110,125,8,44,0,0,TAU);g.fillStyle=hexA(C.aqua,.35);g.fill();g.strokeStyle=C.aqua;g.lineWidth=1.6;g.stroke();g.restore();g.save();g.beginPath();g.ellipse(340,125,4,16,0,0,TAU);g.fillStyle=hexA(C.aqua,.35);g.fill();g.strokeStyle=C.aqua;g.stroke();g.restore();circ(g,300,125,4,C.down);
+   box(g,100,70,250,110,null,hexA(C.mute,.4),6);pill(g,110,52,'OBJEKTIV (LINSE)',C.aqua,1);pill(g,300,200,'BRENNPUNKT',C.down,1);pill(g,358,52,'OKULAR',C.aqua,1,'right');circ(g,370,125,6,null,C.text,1.4);}
+  if(s===2){box(g,40,70,320,110,null,hexA(C.mute,.45),6);g.save();g.strokeStyle=C.aqua;g.lineWidth=4;g.beginPath();g.moveTo(350,74);g.quadraticCurveTo(338,125,350,176);g.stroke();g.restore();
+   [85,105,145,165].forEach(y=>{line(g,10,y,344,y,hexA(C.gold,.55),1.3);line(g,344,y,200,125,hexA(C.gold,.55),1.3);});line(g,200,125,200,40,hexA(C.gold,.55),1.3);line(g,188,137,212,113,C.aqua,3);box(g,192,30,16,12,C.head,C.text,2);
+   pill(g,330,200,'HAUPTSPIEGEL',C.aqua,1);pill(g,120,200,'FANGSPIEGEL',C.aqua,1);pill(g,250,30,'OKULAR',C.text,1);}
+  if(s===3){lines(g,[['Auge: 7 mm',C.mute,12.5,1],['Spiegel: 8 m = 8.000 mm',C.gold,12.5,clamp(p*4-.3)],['(8.000 ÷ 7)² ≈ 1.143²',C.text,12.5,clamp(p*4-1)],['≈ 1,3 MIO. × MEHR LICHT',C.up,14,clamp(p*4-1.8),800]],16,46,38);
+   circ(g,320,125,80*ease(clamp(p*1.4)),hexA(C.gold,.25),C.gold,2);circ(g,320,125,1.5,C.text);pill(g,320,222,'8-m-SPIEGEL',C.gold,1);}
+  if(s===4){lines(g,[['VERGRÖSSERUNG',C.mute,11,1,700],['= f Objektiv ÷ f Okular',C.text,13,1],['= 1.000 mm ÷ 10 mm',C.aqua,13,clamp(p*3-.3)],['= 100-FACH',C.up,16,clamp(p*3-1),800]],16,50,38);
+   const k=lerp(1,4,ease(clamp(p*1.5-.3)));g.save();g.beginPath();g.arc(310,125,70,0,TAU);g.clip();g.fillStyle=C.space;g.fillRect(240,55,140,140);planet(g,310,125,10*k,'#9aa3ad',{craters:1,la:Math.PI*.9});g.restore();circ(g,310,125,70,null,C.line2,2);}}
+ ,box:{was:'Ein Teleskop sammelt Licht mit einer Linse oder einem Spiegel und erzeugt ein helles, vergrößertes Bild von weit entfernten Objekten.',h2:'So erkennst du sie',
+ erkennen:['<b>Refraktor:</b> Linse vorne, Okular hinten','<b>Reflektor:</b> Spiegel hinten im Tubus','<b>Öffnung:</b> wichtiger als die Vergrößerung','Lichtmenge ~ Durchmesser²'],
+ bedeutung:'Die größten Teleskope stehen auf hohen Bergen in Wüsten (z. B. in Chile), wo die Luft dünn, trocken und ruhig ist und kaum Lichtverschmutzung stört.',
+ tipp:'Für den Einstieg ist ein gutes Fernglas (z. B. 10 × 50) oft besser als ein billiges Teleskop: Damit siehst du Mondkrater, Jupitermonde und Sternhaufen.'}});
+
+les({id:'spektrum',thumb:0,cat:'beobachten',title:'Licht & Spektrum',sub:'Der Fingerabdruck der Sterne',
+ steps:S([[5000,'Weißes Sternenlicht besteht aus allen Farben. Ein Prisma oder ein Gitter fächert es in ein Regenbogen-Spektrum auf.'],
+ [5200,'Im Spektrum der Sonne fehlen bestimmte Farben: Es gibt dunkle Linien. Jedes chemische Element verschluckt ganz bestimmte Farben.'],
+ [5600,'Wie ein Fingerabdruck: Aus der Lage der Linien erkennen Astronomen, woraus ein Stern besteht – ohne jemals dort gewesen zu sein.'],
+ [5600,'Das Element Helium wurde 1868 zuerst im Sonnenspektrum entdeckt – erst viele Jahre später auf der Erde. Daher der Name: Helios heißt Sonne.'],
+ [5600,'Bewegt sich ein Stern von uns weg, rutschen alle Linien Richtung Rot (Rotverschiebung). Kommt er näher, rutschen sie Richtung Blau.']]),
+ draw(g,st){const{s,p,t}=st;const SUN=[656.3,589,527,518,486.1,434,430,410.2],H=[656.3,486.1,434,410.2];
+  if(s===0){poly(g,[[170,70],[120,180],[220,180]],hexA(C.aqua,.18),C.aqua,1.6);line(g,10,140,150,128,C.text,3);const n=7;for(let i=0;i<n;i++){const l=410+i*45;g.save();g.strokeStyle=wlc(l);g.lineWidth=3;g.beginPath();g.moveTo(190,128);g.lineTo(390,60+i*22);g.stroke();g.restore();}pill(g,60,110,'WEISSES LICHT',C.text,1);pill(g,170,200,'PRISMA',C.aqua,1);}
+  if(s===1||s===4){const sh=s===4?Math.sin(t*.0018)*16:0;spectrum(g,30,90,340,50,s===1?SUN.filter((_,i)=>i<Math.ceil(p*SUN.length*1.3)):H,{shift:sh});txt(g,30,154,'400 nm',C.mute,9.5,'left',700);txt(g,370,154,'700 nm',C.mute,9.5,'right',700);
+   if(s===1){pill(g,200,40,'DUNKLE LINIEN',C.text,1);pill(g,200,200,'FRAUNHOFER-LINIEN (SONNE)',C.gold,1);}else{pill(g,200,40,sh>3?'→ ROTVERSCHIEBUNG (ENTFERNT SICH)':sh<-3?'← BLAUVERSCHIEBUNG (KOMMT NÄHER)':'IN RUHE',sh>3?C.down:sh<-3?C.blue:C.text,1);arrow(g,200,190,200+sh*5,190,sh>0?C.down:C.blue,2.4,Math.abs(sh)>2?1:0);}}
+  if(s===2){spectrum(g,30,46,340,40,SUN);spectrum(g,30,150,340,40,H,{emit:1});H.forEach(l=>{const X=30+(l-400)/300*340;line(g,X,88,X,148,hexA(C.gold,.7),1.2,[3,3]);});pill(g,30,30,'SONNE',C.gold,1,'left');pill(g,30,208,'WASSERSTOFF IM LABOR',C.aqua,1,'left');pill(g,370,118,'GLEICHE LINIEN!',C.up,clamp(p*2),'right');}
+  if(s===3){spectrum(g,30,90,340,50,[589,589.6,587.6]);const X=30+(587.6-400)/300*340;circ(g,X,115,16,null,C.gold,2);tag(g,X,99,X-40,40,'HELIUM 587,6 nm',C.gold,1);tag(g,X+4,131,X+70,200,'NATRIUM 589 nm',C.orange,1);pill(g,330,40,'HELIOS = SONNE',C.text,1);}}
+ ,box:{was:'Ein Spektrum ist das in seine Farben zerlegte Licht. Dunkle oder helle Linien darin verraten, welche Elemente vorhanden sind und wie sich die Lichtquelle bewegt.',h2:'So liest man es',
+ erkennen:['Dunkle Linien: Elemente schlucken Licht (Absorption)','Helle Linien: heißes Gas sendet Licht aus (Emission)','Linien nach Rot verschoben: Objekt entfernt sich','Linien nach Blau verschoben: Objekt kommt näher'],
+ bedeutung:'Fast alles, was wir über Sterne wissen – Zusammensetzung, Temperatur, Bewegung – stammt aus der Analyse ihres Lichts. Die Spektroskopie ist das wichtigste Werkzeug der Astronomie.',
+ tipp:'Eine alte CD oder DVD wirkt wie ein Gitter: Halte sie schräg ins Licht einer Lampe – du siehst ein Spektrum. Bei Energiesparlampen erkennst du sogar einzelne Linien!'}});
+
+les({id:'exoplaneten',cat:'beobachten',title:'Exoplaneten finden',sub:'Planeten bei fremden Sternen',
+ steps:S([[5000,'Exoplaneten sind Planeten, die um andere Sterne als die Sonne kreisen. Inzwischen sind über 6.000 bestätigt.'],
+ [5400,'Sie sind viel zu lichtschwach, um sie direkt zu sehen. Aber: Zieht ein Planet vor seinem Stern vorbei, wird der Stern ein winziges bisschen dunkler.'],
+ [5400,'Die Lichtkurve zeigt dann eine kleine Delle – den Transit. Wie tief die Delle ist, verrät die Größe des Planeten.'],
+ [6200,'Rechnen: Helligkeitsabfall = (Planetenradius ÷ Sternradius)². Jupiter vor der Sonne: (1 ÷ 10)² = 1 %. Die Erde: (1 ÷ 109)² ≈ 0,008 %.'],
+ [5800,'Zweite Methode: Der Planet zieht seinen Stern leicht hin und her. Das Sternlicht wird abwechselnd blau- und rotverschoben – die Radialgeschwindigkeits-Methode.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.4);
+  if(s===0){const r=rng(13);for(let i=0;i<9;i++){const x=30+r()*340,y=30+r()*170,R=6+r()*12;starDot(g,x,y,2.2,tcol(3500+r()*6000));g.save();g.strokeStyle=hexA(C.mute,.35);g.beginPath();g.ellipse(x,y,R,R*.4,0,0,TAU);g.stroke();g.restore();const a=t*.002*(1+i*.2)+i;circ(g,x+Math.cos(a)*R,y+Math.sin(a)*R*.4,1.8,[C.earth,C.orange,C.aqua][i%3]);}pill(g,200,232,'ÜBER 6.000 EXOPLANETEN',C.up,1);}
+  if(s>=1&&s<=3){const sx=110,sy=95,sr=50,u=(t*.00012)%1,px=lerp(30,190,u);sun(g,sx,sy,sr,1,'#ffe39a');circ(g,px,sy+6,8,C.bg==='#ffffff'?'#131a26':'#000000',C.line2,1);
+   const flux=uu=>{const d=Math.abs(lerp(30,190,uu)-sx);return 1-.22*clamp((sr+8-d)/16);};const x0=222,y0=150,w=165,h=100;
+   if(s>=2){axes(g,x0,y0,w,h,'ZEIT','HELLIGKEIT',[],[]);g.save();g.strokeStyle=C.gold;g.lineWidth=2;g.beginPath();for(let i=0;i<=80*u;i++){const uu=i/80;const y=y0-flux(uu)*h*.85;i?g.lineTo(x0+uu*w,y):g.moveTo(x0+uu*w,y);}g.stroke();g.restore();circ(g,x0+u*w,y0-flux(u)*h*.85,3.5,C.gold);pill(g,x0+w/2,y0-h*.85*.78+22,'TRANSIT',C.down,flux(u)<.9?1:.4);}
+   else pill(g,300,60,'STERN WIRD DUNKLER',C.gold,1);
+   if(s===3){pill(g,300,196,'JUPITER: (1 ÷ 10)² = 1 %',C.orange,1);pill(g,300,224,'ERDE: (1 ÷ 109)² ≈ 0,008 %',C.earth,clamp(p*2-.4));}
+   if(s<3)pill(g,110,200,'PLANET ZIEHT VORBEI',C.text,1);}
+  if(s===4){const cx=150,cy=125,a=t*.0016,R=90;const sx=cx-Math.cos(a)*9,sy=cy-Math.sin(a)*9*.4,v=Math.sin(a);sun(g,sx,sy,26,1,v>0?'#ffb59a':'#b5ccff',v>0?'#f0605d':'#4c7dff');g.save();g.strokeStyle=hexA(C.mute,.35);g.beginPath();g.ellipse(cx,cy,R,R*.4,0,0,TAU);g.stroke();g.restore();circ(g,cx+Math.cos(a)*R,cy+Math.sin(a)*R*.4,6,C.orange);
+   const x0=270,y0=125;line(g,x0,y0,x0+120,y0,C.line2,1);plot(g,u=>.5+.4*Math.sin(a-(1-u)*6),x0,y0+40,120,80,C.aqua,2,1,1);pill(g,330,40,v>0?'ENTFERNT SICH → ROT':'KOMMT NÄHER → BLAU',v>0?C.down:C.blue,1);pill(g,150,232,'STERN WACKELT',C.text,1);}}
+ ,box:{was:'Exoplaneten sind Planeten außerhalb unseres Sonnensystems. Die meisten wurden indirekt entdeckt – über ihre Wirkung auf den Stern.',h2:'So findet man sie',
+ erkennen:['<b>Transit:</b> Stern wird regelmäßig etwas dunkler','<b>Radialgeschwindigkeit:</b> Stern wackelt, Licht wird verschoben','<b>Direkte Abbildung:</b> selten, nur große, ferne Planeten','Wiederholte Delle = Umlaufzeit des Planeten'],
+ bedeutung:'Viele Sterne haben Planeten – vermutlich gibt es in der Milchstraße mehr Planeten als Sterne. Manche liegen in der „bewohnbaren Zone“, wo flüssiges Wasser möglich wäre.',
+ tipp:'Weltraumteleskope wie Kepler und TESS haben Tausende Planeten über die Transit-Methode gefunden. Mit dem James-Webb-Teleskop untersucht man sogar ihre Atmosphären.'}});
+
+les({id:'jwst',thumb:1,cat:'beobachten',title:'Das James-Webb-Teleskop',sub:'Ein goldenes Auge im Infrarot',
+ steps:S([[5000,'Das James-Webb-Weltraumteleskop startete am 25. Dezember 2021. Es ist das größte Weltraumteleskop, das je gebaut wurde.'],
+ [5600,'Sein Hauptspiegel misst 6,5 m und besteht aus 18 sechseckigen, vergoldeten Segmenten. Gold reflektiert Infrarotlicht besonders gut.'],
+ [6000,'Es beobachtet im Infrarot – also Wärmestrahlung. So blickt es durch Staubwolken hindurch und sieht die ersten Galaxien, deren Licht ins Infrarote gedehnt wurde.'],
+ [5600,'Damit die eigene Wärme nicht stört, schützt ein tennisplatzgroßer Sonnenschild aus fünf hauchdünnen Lagen. Die Spiegelseite ist kälter als −220 °C.'],
+ [5600,'Es kreist nicht um die Erde, sondern steht rund 1,5 Mio. km entfernt am Lagrange-Punkt L2 – etwa viermal so weit weg wie der Mond.']]),
+ draw(g,st){const{s,p,t}=st;stars(g,t,.5);
+  if(s===0){jwstIcon(g,200,150,2.4);pill(g,200,22,'START: 25.12.2021',C.gold,1);pill(g,200,232,'GRÖSSTES WELTRAUMTELESKOP',C.text,1);}
+  if(s===1){const sz=24,cx=200,cy=118,HX=[];for(let q=-2;q<=2;q++)for(let r=-2;r<=2;r++){const d=Math.max(Math.abs(q),Math.abs(r),Math.abs(-q-r));if(d===1||d===2)HX.push([q,r,d]);}HX.sort((a,b)=>a[2]-b[2]||Math.atan2(a[1],a[0])-Math.atan2(b[1],b[0]));
+   HX.forEach(([q,r],i)=>{const a=clamp(p*20-i*.9);if(a<=0)return;const x=cx+sz*1.5*q,y=cy+sz*Math.sqrt(3)*(r+q/2);g.save();g.globalAlpha=a;g.beginPath();for(let k=0;k<6;k++){const an=k*TAU/6;g.lineTo(x+Math.cos(an)*(sz-1.5),y+Math.sin(an)*(sz-1.5));}g.closePath();const gr=g.createLinearGradient(x-sz,y-sz,x+sz,y+sz);gr.addColorStop(0,'#ffe08a');gr.addColorStop(1,'#c78a12');g.fillStyle=gr;g.fill();g.strokeStyle=C.gold;g.lineWidth=1;g.stroke();g.restore();});
+   pill(g,40,22,'18 SEGMENTE',C.gold,1,'left');pill(g,360,22,'Ø 6,5 m',C.text,1,'right');pill(g,200,236,'VERGOLDET',C.gold,1);}
+  if(s===2){[[10,'SICHTBARES LICHT',false],[205,'INFRAROT',true]].forEach(([x0,n,ir])=>{box(g,x0,30,185,180,C.space,C.line2,8);g.save();g.beginPath();rr(g,x0,30,185,180,8);g.clip();const r=rng(17);for(let i=0;i<40;i++){const x=x0+r()*185,y=30+r()*180,inC=Math.hypot(x-x0-92,y-120)<62;if(!inC||ir)starDot(g,x,y,ir?1.6:1.2,ir?tcol(3500+r()*3000):C.star,ir&&inC?1:.8);}
+    if(!ir){glow(g,x0+92,120,75,'#5a3a20',1.6);g.globalAlpha=.85;circ(g,x0+92,120,58,hexA('#3a2614',.85));}else{glow(g,x0+92,120,70,C.down,.35);}g.restore();pill(g,x0+92,226,n,ir?C.down:C.text,1);});pill(g,200,14,'BLICK DURCH DEN STAUB',C.gold,1);}
+  if(s===3){sun(g,-10,125,40);for(let k=0;k<5;k++){const x=150+k*14;poly(g,[[x,40+k*3],[x+40,125],[x,210-k*3],[x-40,125]],hexA(C.purple,.22),C.purple,1.2);}jwstIcon(g,330,140,1.4);pill(g,90,40,'HEISSE SEITE',C.fire,1);pill(g,330,40,'< −220 °C',C.blue,1);pill(g,190,232,'5 LAGEN SONNENSCHILD',C.purple,1);}
+  if(s===4){sun(g,-20,125,34);earth(g,250,125,9);g.save();g.strokeStyle=hexA(C.mute,.4);circ(g,250,125,30,null,hexA(C.mute,.4),1);g.restore();const ma=t*.001;circ(g,250+Math.cos(ma)*30,125+Math.sin(ma)*30,3,C.moon);
+   const L2=370;g.save();g.strokeStyle=hexA(C.gold,.5);g.beginPath();g.ellipse(L2,125,10,22,0,0,TAU);g.stroke();g.restore();const ja=t*.0015;jwstIcon(g,L2+Math.cos(ja)*10,125+Math.sin(ja)*22,.35);pill(g,L2,82,'L2',C.gold,1);
+   arrow(g,250,180,L2,180,C.mute,1.4,1,true);pill(g,310,196,'1,5 MIO. km',C.text,1);pill(g,250,62,'MOND: 384.000 km',C.mute,1);}}
+ ,box:{was:'Das James-Webb-Weltraumteleskop (JWST) ist ein Infrarot-Teleskop von NASA, ESA und der kanadischen Raumfahrtagentur. Es ist der Nachfolger des Hubble-Teleskops.',h2:'So erkennst du es',
+ erkennen:['<b>Spiegel:</b> 6,5 m, 18 vergoldete Sechsecke','<b>Sonnenschild:</b> 5 Lagen, etwa so groß wie ein Tennisplatz','<b>Ort:</b> Lagrange-Punkt L2, 1,5 Mio. km von der Erde','<b>Licht:</b> Infrarot (Wärmestrahlung)'],
+ bedeutung:'Webb sieht Galaxien, die nur wenige Hundert Millionen Jahre nach dem Urknall entstanden, blickt in Sternentstehungsgebiete und untersucht Atmosphären von Exoplaneten.',
+ tipp:'Der Spiegel war zu groß für jede Rakete. Deshalb wurde er gefaltet gestartet und hat sich im All wie ein Origami Schritt für Schritt entfaltet.'}});
+
+/* ============ Bereiche ============ */
+const CATINFO_F={
+ sonne:{d:'Sonne, die acht Planeten, Mondphasen und Jahreszeiten.',acc:'var(--gold)',hex:'#f5c542'},
+ sterne:{d:'Sternentstehung, Farben, Lebenslauf und Lichtjahre.',acc:'var(--orange)',hex:'#ff9f43'},
+ galaxien:{d:'Milchstraße, Galaxientypen, Urknall und Dunkle Materie.',acc:'var(--blue)',hex:'#4c9aff'},
+ extrem:{d:'Schwarze Löcher, Neutronensterne, Gravitationswellen und Zeit.',acc:'var(--purple)',hex:'#b388ff'},
+ raumfahrt:{d:'Raketen, Umlaufbahn, ISS und Mondlandung.',acc:'var(--down)',hex:'#f0605d'},
+ beobachten:{d:'Teleskope, Spektrum, Exoplaneten und James Webb.',acc:'var(--aqua)',hex:'#22d3ee'}};
+const SVGI_F={
+ sonne:'<circle cx="32" cy="32" r="12" fill="currentColor" opacity=".9"/><g stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="32" y1="6" x2="32" y2="13"/><line x1="32" y1="51" x2="32" y2="58"/><line x1="6" y1="32" x2="13" y2="32"/><line x1="51" y1="32" x2="58" y2="32"/><line x1="14" y1="14" x2="19" y2="19"/><line x1="45" y1="45" x2="50" y2="50"/><line x1="14" y1="50" x2="19" y2="45"/><line x1="45" y1="19" x2="50" y2="14"/></g>',
+ sterne:'<path d="M32 6 L38 25 L58 25 L42 37 L48 57 L32 45 L16 57 L22 37 L6 25 L26 25 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="33" r="5" fill="currentColor"/>',
+ galaxien:'<ellipse cx="32" cy="32" rx="26" ry="11" fill="none" stroke="currentColor" stroke-width="2.5" transform="rotate(-20 32 32)"/><path d="M32 32 C40 20 54 24 52 32 M32 32 C24 44 10 40 12 32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="32" r="5" fill="currentColor"/>',
+ extrem:'<circle cx="32" cy="32" r="11" fill="currentColor"/><ellipse cx="32" cy="32" rx="27" ry="8" fill="none" stroke="currentColor" stroke-width="3" opacity=".7"/><circle cx="32" cy="32" r="17" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 4"/>',
+ raumfahrt:'<path d="M32 4 C42 14 44 28 40 44 H24 C20 28 22 14 32 4 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="32" cy="22" r="4.5" fill="currentColor"/><path d="M24 34 L14 46 L24 46 M40 34 L50 46 L40 46" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M27 48 Q32 60 37 48" fill="currentColor" opacity=".7"/>',
+ beobachten:'<rect x="12" y="20" width="34" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="3" transform="rotate(-25 29 27)"/><path d="M30 36 L20 58 M30 36 L40 58 M30 36 V58" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="54" cy="10" r="3" fill="currentColor"/>'};
+
+/* ============ Quiz-Daten ============ */
+const TQ_F=[
+ {q:'Was passiert im Kern der Sonne?',a:['Kernfusion: Wasserstoff verschmilzt zu Helium','Kohle verbrennt','Eis schmilzt','Gar nichts'],e:'Bei ca. 15 Mio. °C verschmelzen Wasserstoffkerne zu Helium.',l:'sonne'},
+ {q:'Wie lange braucht das Licht von der Sonne zur Erde?',a:['Etwa 8,3 Minuten','Etwa 1 Sekunde','Etwa 1 Stunde','Etwa 1 Tag'],e:'150.000.000 km ÷ 300.000 km/s = 500 s ≈ 8,3 min.',l:'sonne'},
+ {q:'Licht braucht von der Sonne zum Mars ca. 228 Mio. km. Wie viele Sekunden sind das (300.000 km/s)?',a:['760 Sekunden','228 Sekunden','76 Sekunden','7.600 Sekunden'],e:'228.000.000 ÷ 300.000 = 760 s – also rund 12,7 Minuten.',l:'sonne'},
+ {q:'Wie oft passt die Erde ungefähr nebeneinander in den Sonnendurchmesser?',a:['Etwa 109-mal','Etwa 10-mal','Etwa 1.000-mal','Etwa 3-mal'],e:'Sonne Ø 1,39 Mio. km, Erde Ø 12.742 km.',l:'sonne'},
+ {q:'Welcher Planet ist der größte im Sonnensystem?',a:['Jupiter','Saturn','Erde','Neptun'],e:'Jupiter ist rund 11-mal so breit wie die Erde.',l:'planeten'},
+ {q:'Welche Planeten sind Gesteinsplaneten?',a:['Merkur, Venus, Erde, Mars','Jupiter, Saturn, Uranus, Neptun','Nur die Erde','Mars und Jupiter'],e:'Die vier inneren Planeten haben eine feste Oberfläche.',l:'planeten'},
+ {q:'Wofür steht das „U“ im Merksatz „Mein Vater erklärt mir jeden Sonntag unseren Nachthimmel“?',a:['Uranus','Urknall','Umlaufbahn','Universum'],e:'Merkur, Venus, Erde, Mars, Jupiter, Saturn, Uranus, Neptun.',l:'planeten'},
+ {q:'Wo liegt der Asteroidengürtel?',a:['Zwischen Mars und Jupiter','Zwischen Erde und Mond','Hinter Neptun','Um die Sonne herum direkt an ihrer Oberfläche'],e:'Millionen Gesteinsbrocken kreisen zwischen Mars und Jupiter.',l:'planeten'},
+ {q:'Warum sehen wir Mondphasen?',a:['Wir sehen die beleuchtete Mondhälfte aus wechselnden Blickwinkeln','Der Erdschatten fällt auf den Mond','Der Mond schaltet sein Licht an und aus','Wolken verdecken einen Teil'],e:'Eine Mondhälfte ist immer von der Sonne beleuchtet.',l:'mond'},
+ {q:'Wie lange dauert es von Neumond zu Neumond?',a:['Etwa 29,5 Tage','Etwa 7 Tage','Etwa 365 Tage','Genau 24 Stunden'],e:'Ein Umlauf dauert 27,3 Tage, der Phasenzyklus 29,5 Tage.',l:'mond'},
+ {q:'Wo steht der Mond bei Neumond?',a:['Zwischen Erde und Sonne','Hinter der Erde','Neben dem Mars','Genau über dem Nordpol'],e:'Wir sehen dann nur seine dunkle Seite.',l:'mond'},
+ {q:'Was ist der Hauptgrund für die Jahreszeiten?',a:['Die geneigte Erdachse','Der wechselnde Abstand zur Sonne','Die Mondphasen','Die Sonnenflecken'],e:'Die Achse ist um 23,4° geneigt.',l:'jahreszeiten'},
+ {q:'Wann ist die Erde der Sonne am nächsten?',a:['Anfang Januar','Im Juli','Im April','Im Oktober'],e:'Ca. 147 Mio. km – trotzdem ist bei uns Winter.',l:'jahreszeiten'},
+ {q:'Woraus entstehen Sterne?',a:['Aus Wolken aus Gas und Staub','Aus Planeten','Aus Kometen','Aus Schwarzen Löchern'],e:'Die Schwerkraft zieht Gasnebel zusammen, bis die Fusion zündet.',l:'sternentstehung'},
+ {q:'Welche Farbe haben die heißesten Sterne?',a:['Blau','Rot','Gelb','Orange'],e:'Blaue Sterne sind über 10.000 °C heiß.',l:'sternfarben'},
+ {q:'Zu welcher Spektralklasse gehört die Sonne?',a:['G','O','M','B'],e:'Reihe von heiß nach kühl: O, B, A, F, G, K, M.',l:'sternfarben'},
+ {q:'Was wird aus der Sonne am Ende ihres Lebens?',a:['Ein Weißer Zwerg','Ein Schwarzes Loch','Ein Neutronenstern','Ein Planet'],e:'Nach dem Roten Riesen bleibt ein Weißer Zwerg übrig.',l:'sternleben'},
+ {q:'Was passiert mit sehr schweren Sternen am Ende?',a:['Sie explodieren als Supernova','Sie werden zu Planeten','Sie verschwinden lautlos','Sie werden kalt und blau'],e:'Übrig bleibt ein Neutronenstern oder ein Schwarzes Loch.',l:'sternleben'},
+ {q:'Was ist ein Lichtjahr?',a:['Eine Entfernung','Eine Zeitspanne','Eine Helligkeit','Eine Temperatur'],e:'Die Strecke, die Licht in einem Jahr zurücklegt: ca. 9,46 Billionen km.',l:'lichtjahr'},
+ {q:'Ein Stern ist 10 Lichtjahre entfernt. Wie viele km sind das ungefähr?',a:['94,6 Billionen km','9,46 Billionen km','946 Mio. km','10 Mio. km'],e:'10 × 9,46 Billionen km = 94,6 Billionen km.',l:'lichtjahr'},
+ {q:'Wie weit ist Proxima Centauri entfernt?',a:['Etwa 4,2 Lichtjahre','Etwa 8 Lichtminuten','Etwa 100 Lichtjahre','Etwa 2,5 Mio. Lichtjahre'],e:'Es ist der nächste Stern nach der Sonne.',l:'lichtjahr'},
+ {q:'Wie groß ist die Milchstraße ungefähr?',a:['Etwa 100.000 Lichtjahre','Etwa 100 Lichtjahre','Etwa 1 Lichtjahr','Etwa 100 Mrd. Lichtjahre'],e:'Sie ist eine Balkenspiralgalaxie mit 100–400 Mrd. Sternen.',l:'milchstrasse'},
+ {q:'Wie heißt das Schwarze Loch im Zentrum der Milchstraße?',a:['Sagittarius A*','M87*','Proxima','Andromeda'],e:'Es hat rund 4 Mio. Sonnenmassen.',l:'milchstrasse'},
+ {q:'Welche Galaxien enthalten vor allem alte, rötliche Sterne?',a:['Elliptische Galaxien','Spiralgalaxien','Irreguläre Galaxien','Gar keine'],e:'Spiralarme enthalten dagegen viele junge, blaue Sterne.',l:'galaxientypen'},
+ {q:'Wie alt ist das Universum ungefähr?',a:['13,8 Mrd. Jahre','4,6 Mrd. Jahre','6.000 Jahre','100 Mrd. Jahre'],e:'4,6 Mrd. Jahre ist das Alter der Sonne.',l:'urknall'},
+ {q:'Hubble-Gesetz: 70 km/s pro Mpc. Wie schnell flieht eine Galaxie in 200 Mpc?',a:['14.000 km/s','7.000 km/s','270 km/s','1.400 km/s'],e:'70 × 200 = 14.000 km/s.',l:'urknall'},
+ {q:'Was bedeutet Rotverschiebung?',a:['Das Licht wird gedehnt – das Objekt entfernt sich','Das Objekt wird heißer','Das Objekt kommt näher','Der Stern ist ein Roter Riese'],e:'Die Wellen werden länger und damit röter.',l:'urknall'},
+ {q:'Wie viel des Universums besteht aus normaler Materie?',a:['Etwa 5 %','Etwa 50 %','Etwa 95 %','Etwa 27 %'],e:'27 % Dunkle Materie, 68 % Dunkle Energie.',l:'dunkel'},
+ {q:'Woran erkennt man Dunkle Materie?',a:['An ihrer Schwerkraft','An ihrem Leuchten','An ihrer Farbe','An ihrem Geruch'],e:'Zum Beispiel drehen sich Galaxien außen „zu schnell“.',l:'dunkel'},
+ {q:'Wie heißt die Grenze eines Schwarzen Lochs?',a:['Ereignishorizont','Akkretionsscheibe','Photosphäre','Asteroidengürtel'],e:'Was den Ereignishorizont überschreitet, kommt nie wieder heraus.',l:'schwarzesloch'},
+ {q:'Welchen Radius hätte die Sonne als Schwarzes Loch?',a:['Etwa 3 km','Etwa 3.000 km','Etwa 3 m','Etwa 300.000 km'],e:'r = 2GM ÷ c² ≈ 2.950 m.',l:'schwarzesloch'},
+ {q:'Wie groß ist ein Neutronenstern ungefähr?',a:['Etwa 20 km','Etwa so groß wie die Sonne','Etwa so groß wie die Erde','Etwa 2 m'],e:'Trotzdem hat er mehr Masse als die Sonne.',l:'neutronenstern'},
+ {q:'Was ist ein Pulsar?',a:['Ein schnell drehender Neutronenstern mit Strahlen wie ein Leuchtturm','Ein pulsierender Planet','Ein Komet','Ein Raumschiff'],e:'Streift uns sein Strahl, messen wir regelmäßige Pulse.',l:'neutronenstern'},
+ {q:'Wann wurde erstmals eine Gravitationswelle gemessen?',a:['Am 14. September 2015','1969','1905','2021'],e:'Gemessen vom LIGO-Detektor; Nobelpreis 2017.',l:'gravitationswellen'},
+ {q:'Wie lang sind die Arme des LIGO-Detektors?',a:['4 km','4 m','40 km','400 km'],e:'Laser messen darin winzigste Längenänderungen.',l:'gravitationswellen'},
+ {q:'Um wie viel gehen GPS-Uhren pro Tag vor?',a:['Etwa 38 Mikrosekunden','Etwa 38 Sekunden','Etwa 38 Minuten','Gar nicht'],e:'Ohne Korrektur wäre das ein Fehler von ca. 11 km pro Tag.',l:'zeit'},
+ {q:'Ein Zeitfehler von 0,00001 s – wie viel Strecke legt Licht in der Zeit zurück?',a:['3 km','30 m','300 km','30 km'],e:'0,00001 s × 300.000 km/s = 3 km.',l:'zeit'},
+ {q:'Warum braucht eine Rakete im All keinen Sauerstoff aus der Luft?',a:['Sie nimmt ihren Sauerstoff selbst mit','Im All gibt es genug Sauerstoff','Sie fliegt mit Strom','Sie braucht gar keinen Antrieb'],e:'Treibstoff und Oxidator sind in eigenen Tanks.',l:'rakete'},
+ {q:'Warum hat eine Rakete Stufen?',a:['Leere Stufen werden abgeworfen, um Gewicht zu sparen','Damit sie schöner aussieht','Für mehr Platz für Passagiere','Damit sie langsamer wird'],e:'So muss kein unnötiges Gewicht beschleunigt werden.',l:'rakete'},
+ {q:'Welche Geschwindigkeit braucht man für eine Umlaufbahn knapp über der Erde?',a:['Etwa 7,9 km/s','Etwa 7,9 km/h','Etwa 300.000 km/s','Etwa 1 km/s'],e:'Das sind rund 28.000 km/h.',l:'umlaufbahn'},
+ {q:'Wie groß ist die Fluchtgeschwindigkeit der Erde?',a:['Etwa 11,2 km/s','Etwa 7,9 km/s','Etwa 1,1 km/s','Etwa 112 km/s'],e:'Ab da entkommt man der Erde ganz.',l:'umlaufbahn'},
+ {q:'Warum schweben Astronauten auf der ISS?',a:['Sie fallen zusammen mit der Station ständig um die Erde','Es gibt dort keine Schwerkraft','Die ISS hat Magnete','Sie tragen Raketenrucksäcke'],e:'In 400 km Höhe wirkt noch rund 90 % der Schwerkraft.',l:'umlaufbahn'},
+ {q:'Wie lange braucht die ISS für eine Erdumrundung?',a:['Etwa 92 Minuten','Etwa 24 Stunden','Etwa 1 Woche','Etwa 10 Minuten'],e:'Sie fliegt mit rund 28.000 km/h.',l:'iss'},
+ {q:'Die ISS fliegt 28.000 km/h. Wie weit kommt sie in einer halben Stunde?',a:['14.000 km','28.000 km','56.000 km','1.400 km'],e:'28.000 × 0,5 = 14.000 km.',l:'iss'},
+ {q:'Wann landeten die ersten Menschen auf dem Mond?',a:['1969','1957','1981','2001'],e:'Mit Apollo 11 – Neil Armstrong und Buzz Aldrin.',l:'mondlandung'},
+ {q:'Ein Astronaut wiegt auf der Erde 120 kg (mit Anzug). Wie viel fühlt er auf dem Mond?',a:['20 kg','60 kg','120 kg','12 kg'],e:'Auf dem Mond: ein Sechstel → 120 ÷ 6 = 20 kg.',l:'mondlandung'},
+ {q:'Was ist bei einem Teleskop am wichtigsten, um schwache Objekte zu sehen?',a:['Eine große Öffnung','Eine hohe Vergrößerung','Eine bunte Farbe','Ein langes Stativ'],e:'Die Öffnung bestimmt, wie viel Licht gesammelt wird.',l:'teleskop'},
+ {q:'Brennweite Objektiv 1.200 mm, Okular 20 mm. Welche Vergrößerung?',a:['60-fach','24-fach','120-fach','600-fach'],e:'1.200 ÷ 20 = 60.',l:'teleskop'},
+ {q:'Ein Teleskop hat doppelt so viel Durchmesser. Wie viel mehr Licht sammelt es?',a:['4-mal so viel','2-mal so viel','8-mal so viel','Gleich viel'],e:'Die Fläche wächst mit dem Quadrat: 2² = 4.',l:'teleskop'},
+ {q:'Welches Element wurde zuerst im Sonnenspektrum entdeckt?',a:['Helium','Eisen','Sauerstoff','Gold'],e:'1868 – benannt nach Helios, der Sonne.',l:'spektrum'},
+ {q:'Was verraten dunkle Linien im Sternspektrum?',a:['Welche Elemente im Stern vorhanden sind','Wie alt der Beobachter ist','Wie groß das Teleskop ist','Wann es regnet'],e:'Jedes Element hat seinen eigenen „Fingerabdruck“.',l:'spektrum'},
+ {q:'Ein Planet hat 1/10 des Sternradius. Wie stark wird der Stern beim Transit dunkler?',a:['1 %','10 %','0,1 %','50 %'],e:'(1 ÷ 10)² = 1/100 = 1 %.',l:'exoplaneten'},
+ {q:'Wie viele Exoplaneten sind inzwischen bestätigt?',a:['Über 6.000','Etwa 8','Etwa 50','Über 6 Millionen'],e:'Die meisten wurden mit der Transit-Methode gefunden.',l:'exoplaneten'},
+ {q:'Wie groß ist der Hauptspiegel des James-Webb-Teleskops?',a:['6,5 m','2,4 m','65 m','65 cm'],e:'18 vergoldete Sechsecke. Hubble hat 2,4 m.',l:'jwst'},
+ {q:'In welchem Licht beobachtet das James-Webb-Teleskop vor allem?',a:['Infrarot','Ultraviolett','Röntgen','Radio'],e:'Infrarot durchdringt Staubwolken.',l:'jwst'},
+ {q:'Wo steht das James-Webb-Teleskop?',a:['Am Lagrange-Punkt L2, 1,5 Mio. km entfernt','In 400 km Höhe wie die ISS','Auf dem Mond','In Chile auf einem Berg'],e:'Etwa viermal so weit weg wie der Mond.',l:'jwst'}
+];
+const PQ_F=[
+ {l:'planeten',s:4,p:.9,q:'Welche zwei Himmelskörper werden hier verglichen?',a:['Jupiter und Erde','Sonne und Mond','Mars und Venus','Saturn und Pluto'],e:'Jupiter ist rund 11-mal so breit wie die Erde.'},
+ {l:'mond',s:2,p:.5,q:'Welche Mondphase sieht man von der Erde aus?',a:['Neumond','Vollmond','Erstes Viertel','Letztes Viertel'],e:'Der Mond steht zwischen Erde und Sonne.'},
+ {l:'mond',s:3,p:.5,q:'Welche Mondphase ist hier zu sehen?',a:['Vollmond','Neumond','Zunehmende Sichel','Mondfinsternis'],e:'Der Mond steht hinter der Erde – ganz beleuchtet.'},
+ {l:'sternleben',s:1,p:.95,q:'Was für ein Stern ist hier zu sehen?',a:['Ein Roter Riese','Ein Weißer Zwerg','Ein Neutronenstern','Ein Pulsar'],e:'Sterne wie die Sonne blähen sich am Ende zum Roten Riesen auf.'},
+ {l:'galaxientypen',s:1,p:.5,q:'Welcher Galaxientyp ist das?',a:['Spiralgalaxie','Elliptische Galaxie','Irreguläre Galaxie','Kugelsternhaufen'],e:'Flache Scheibe mit Spiralarmen.'},
+ {l:'galaxientypen',s:2,p:.5,q:'Welcher Galaxientyp ist das?',a:['Elliptische Galaxie','Spiralgalaxie','Irreguläre Galaxie','Planetarischer Nebel'],e:'Rund bis oval, ohne Arme, alte rötliche Sterne.'},
+ {l:'schwarzesloch',s:2,p:.5,q:'Was zeigt dieses Bild?',a:['Ein Schwarzes Loch mit Akkretionsscheibe','Den Saturn mit Ringen','Die Sonne','Eine Spiralgalaxie'],e:'Heißes Gas kreist um das Schwarze Loch und leuchtet.'},
+ {l:'umlaufbahn',s:2,p:.95,q:'Was zeigt die grüne Bahn?',a:['Eine Umlaufbahn (ca. 7,9 km/s)','Eine Fluchtbahn','Einen Absturz','Die Mondbahn'],e:'Die Kugel fällt ständig um die Erde herum.'},
+ {l:'iss',s:1,p:.5,q:'Was ist das?',a:['Die Internationale Raumstation ISS','Das James-Webb-Teleskop','Eine Mondfähre','Ein Wettersatellit'],e:'Mit großen Solarflügeln und Modulen in der Mitte.'},
+ {l:'jwst',s:1,p:.95,q:'Was zeigt dieses Bild?',a:['Den Spiegel des James-Webb-Teleskops','Eine Bienenwabe','Solarzellen der ISS','Ein Spektrum'],e:'18 vergoldete, sechseckige Segmente.'},
+ {l:'exoplaneten',s:2,p:.5,q:'Was zeigt die Kurve rechts?',a:['Eine Transit-Lichtkurve','Die Temperatur der Erde','Einen Aktienkurs','Eine Gravitationswelle'],e:'Die Delle entsteht, wenn der Planet vor dem Stern vorbeizieht.'},
+ {l:'spektrum',s:1,p:.95,q:'Was sind die dunklen Striche?',a:['Absorptionslinien von Elementen','Kratzer im Bild','Planeten','Sonnenflecken'],e:'Elemente verschlucken ganz bestimmte Farben.'}
+];
+
+/* ============ Player ============ */
+const P={L:null,t:0,playing:false,speed:1,cv:null,ctx:null,W:0,H:0,dirty:true,last:0,stepIdx:-1,tl:null};
+function buildTL(L){let t=0;const steps=L.steps.map(s=>{const o={t,d:s.d,text:s.text};t+=s.d;return o;});return{steps,total:t};}
+function stAt(tl,t){let s=0;tl.steps.forEach((x,i)=>{if(t>=x.t)s=i;});const S=tl.steps[s];const T=Math.min(t-S.t,S.d);return{s,p:clamp(T/S.d),T,t,d:S.d};}
+function render(ctx,W,H,L,st){ctx.setTransform(1,0,0,1,0,0);const dpr=ctx._dpr||1;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+ const sc=Math.min(W/VW,H/VH);ctx.translate((W-VW*sc)/2,(H-VH*sc)/2);ctx.scale(sc,sc);ctx.lineCap='butt';ctx.lineJoin='miter';
+ try{L.draw(ctx,st);}catch(e){console.error(L.id,e);}
+}
+function staticFrame(cv,L,s,p,w,h,nolabel){const dpr=window.devicePixelRatio||1;cv.width=w*dpr;cv.height=h*dpr;cv.style.width=w+'px';cv.style.height=h+'px';const ctx=cv.getContext('2d');ctx._dpr=dpr;
+ const tl=buildTL(L);s=Math.min(s,tl.steps.length-1);const S=tl.steps[s];const t=S.t+S.d*p;G.nolabel=!!nolabel;render(ctx,w,h,L,stAt(tl,t));G.nolabel=false;}
+
+/* ============ Fortschritt ============ */
+const KEY='weltraum';let seen={},best=0;try{seen=JSON.parse(localStorage.getItem(KEY+'-seen')||'{}');best=+(localStorage.getItem(KEY+'-best')||0)}catch(e){}
+function markSeen(id){if(seen[id])return;seen[id]=1;try{localStorage.setItem(KEY+'-seen',JSON.stringify(seen))}catch(e){}renderList();updProg();}
+function updProg(){const n=LESSONS.filter(l=>seen[l.id]).length;document.getElementById('progtxt').textContent=`${n} / ${LESSONS.length}`;document.getElementById('progbar').style.width=(n/LESSONS.length*100)+'%';}
+
+const CATINFO=CATINFO_F,SVGI=SVGI_F;
+const catIcon=(ck,s=58)=>`<svg width="${s}" height="${s}" viewBox="0 0 64 64" style="color:${CATINFO[ck].acc}">${SVGI[ck]}</svg>`;
+
+/* ============ Liste (Seitenleiste) ============ */
+const listEl=document.getElementById('list'),searchEl=document.getElementById('search'),view=document.getElementById('view');
+let current=null;
+function renderList(){
+ const q=searchEl.value.trim().toLowerCase();let h='';
+ for(const ck in CATS){const ls=LESSONS.filter(l=>l.cat===ck&&(!q||(l.title+' '+l.sub+' '+CATS[ck]).toLowerCase().includes(q)));if(!ls.length)continue;
+  h+=`<div class="cat" style="color:${CATINFO[ck].acc}">${CATS[ck]}</div>`;
+  h+=ls.map(l=>`<button class="item ${current===l?'on':''} ${seen[l.id]?'seen':''}" data-id="${l.id}"><div class="ic" style="color:${CATINFO[ck].acc}">${catIcon(ck,22)}</div><div><b>${l.title}</b><span>${l.sub}</span></div><div class="ok">✓</div></button>`).join('');}
+ if(!h)h='<p style="color:var(--mute);padding:10px">Nichts gefunden.</p>';
+ h+=`<div class="cat">Quiz</div><button class="item" data-id="quiz"><div class="ic">🎯</div><div><b>Quiz starten</b><span>${best?`Bestwert ${best}/10`:'10 zufällige Fragen'}</span></div></button>`;
+ listEl.innerHTML=h;listEl.querySelectorAll('.item').forEach(b=>b.onclick=()=>{location.hash=b.dataset.id;});
+}
+searchEl.addEventListener('input',renderList);
+
+/* ============ Lektion ============ */
+function openLesson(id){
+ const L=LESSONS.find(l=>l.id===id);if(!L){showHome();return;}
+ current=L;const ls=LESSONS.filter(l=>l.cat===L.cat),idx=LESSONS.indexOf(L),ci=ls.indexOf(L),prev=LESSONS[idx-1],next=LESSONS[idx+1],b=L.box,acc=CATINFO[L.cat].acc;
+ view.innerHTML=`
+ <button class="back" id="back">‹ ${CATS[L.cat]}</button>
+ <div class="kicker" style="color:${acc}">${CATS[L.cat]} · Lektion ${ci+1} von ${ls.length}</div>
+ <h1>${L.title}</h1>
+ <p class="lead">${L.sub}</p>
+ <div class="player">
+  <div class="cwrap" id="cwrap"><canvas id="cv"></canvas><div class="overlay" id="ovl"><div id="ovltxt">▶ ABSPIELEN</div></div></div>
+  <div class="caption"><div class="no" id="stepno"></div><p id="captxt"></p></div>
+  <div class="ctrl"><button class="cb" id="play" title="Abspielen/Pause" aria-label="Abspielen oder Pause">❚❚</button><input type="range" id="seek" min="0" step="10" value="0" aria-label="Spulen"><button class="cb" id="speed" title="Geschwindigkeit">1×</button><button class="cb" id="restart" title="Von vorne" aria-label="Von vorne">⟲</button></div>
+  <div class="chips" id="chips"></div>
+ </div>
+ <div class="info">
+  <div class="box b"><h3>Was ist das?</h3><p>${b.was}</p></div>
+  <div class="box g"><h3>${b.h2||'So erkennst du es'}</h3><ul>${b.erkennen.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+  <div class="box y"><h3>Was bedeutet es?</h3><p>${b.bedeutung}</p></div>
+  <div class="box r"><h3>Tipp</h3><p>${b.tipp}</p></div>
+ </div>
+ <div class="pn"><button id="prev" ${prev?'':'disabled'}><small>‹ ZURÜCK</small>${prev?prev.title:'–'}</button><button id="next" ${next?'':'disabled'}><small>WEITER ›</small>${next?next.title:'–'}</button></div>`;
+ document.getElementById('back').onclick=()=>{location.hash='kat-'+L.cat;};
+ if(prev)document.getElementById('prev').onclick=()=>location.hash=prev.id;
+ if(next)document.getElementById('next').onclick=()=>location.hash=next.id;
+ P.L=L;P.tl=buildTL(L);P.t=0;P.playing=true;P.stepIdx=-1;P.cv=document.getElementById('cv');P.ctx=P.cv.getContext('2d');
+ const seek=document.getElementById('seek');seek.max=P.tl.total;
+ seek.oninput=()=>{P.t=+seek.value;P.dirty=true;};
+ document.getElementById('play').onclick=togglePlay;document.getElementById('cwrap').onclick=togglePlay;
+ document.getElementById('restart').onclick=()=>{P.t=0;P.playing=true;P.dirty=true;updBtn();};
+ const sp=document.getElementById('speed');sp.textContent=(P.speed===.5?'½':P.speed)+'×';
+ sp.onclick=e=>{P.speed=P.speed===1?2:P.speed===2?.5:1;e.currentTarget.textContent=(P.speed===.5?'½':P.speed)+'×';};
+ document.getElementById('chips').innerHTML=P.tl.steps.map((s,i)=>`<button class="chip" data-i="${i}">${i+1}</button>`).join('');
+ document.getElementById('chips').onclick=e=>{const c=e.target.closest('.chip');if(!c)return;P.t=P.tl.steps[+c.dataset.i].t+1;P.playing=true;P.dirty=true;updBtn();};
+ resize();updBtn();renderList();window.scrollTo(0,0);
+}
+function togglePlay(){if(!P.L)return;if(P.t>=P.tl.total){P.t=0;P.playing=true;}else P.playing=!P.playing;P.dirty=true;updBtn();}
+function updBtn(){const b=document.getElementById('play');if(!b)return;b.textContent=P.playing?'❚❚':(P.t>=P.tl.total?'⟲':'▶');
+ const o=document.getElementById('ovl');const end=P.t>=P.tl.total;o.classList.toggle('show',!P.playing);document.getElementById('ovltxt').textContent=end?'⟲ NOCHMAL ANSEHEN':'▶ WEITER';}
+function resize(){if(!P.cv)return;const w=P.cv.parentElement.clientWidth;const h=Math.round(clamp(w*.625,210,520));
+ const dpr=window.devicePixelRatio||1;P.cv.width=w*dpr;P.cv.height=h*dpr;P.cv.style.height=h+'px';P.ctx._dpr=dpr;P.W=w;P.H=h;P.dirty=true;}
+window.addEventListener('resize',()=>{resize();const qc=document.getElementById('qcv');if(qc&&Q&&Q.list[Q.i])drawQuizPic();});
+
+/* ============ Startseite & Bereich ============ */
+function showHome(){
+ current=null;P.L=null;P.cv=null;
+ const tiles=Object.keys(CATS).map(ck=>{const ls=LESSONS.filter(l=>l.cat===ck),n=ls.length,sn=ls.filter(l=>seen[l.id]).length,ci=CATINFO[ck];
+  return `<button class="big" data-h="kat-${ck}" style="--acc:${ci.acc};--glow:${hexA(ci.hex,.16)}"><div class="bi">${catIcon(ck)}</div><h2>${CATS[ck]}</h2><p>${ci.d}</p><div class="ft"><span>${n} LEKTIONEN</span><div class="pb"><i style="width:${sn/n*100}%"></i></div><span>${sn}/${n}</span><span class="go">›</span></div></button>`;}).join('');
+ const quiz=`<button class="big" data-h="quiz" style="--acc:var(--gold);--glow:rgba(245,197,66,.14)"><div class="bi" style="font-size:46px;line-height:1">🎯</div><h2>Quiz</h2><p>Teste dein Wissen: 10 zufällige Fragen mit Bildern und Rechenaufgaben.</p><div class="ft"><span>${best?`BESTWERT ${best}/10`:'NOCH NICHT GESPIELT'}</span><span style="flex:1"></span><span class="go">›</span></div></button>`;
+ view.innerHTML=`<div class="home"><div class="kicker">Willkommen</div><h1>Reise durchs Weltall</h1>
+ <p class="lead">Jede Lektion ist ein kleines Video: Sonne, Planeten, Sterne, Galaxien, Schwarze Löcher, Raumfahrt und Teleskope bauen sich Schritt für Schritt auf und werden erklärt.</p>
+ <div class="bigtiles">${tiles}${quiz}</div></div>`;
+ view.querySelectorAll('.big').forEach(t=>t.onclick=()=>location.hash=t.dataset.h);
+ renderList();window.scrollTo(0,0);
+}
+function showCat(ck){
+ if(!CATS[ck]){showHome();return;}current=null;P.L=null;P.cv=null;
+ const ls=LESSONS.filter(l=>l.cat===ck),ci=CATINFO[ck];
+ view.innerHTML=`<div class="home" style="--acc:${ci.acc}"><button class="back" id="back">‹ Startseite</button>
+ <div class="kicker">${ls.length} Lektionen · ${ls.filter(l=>seen[l.id]).length} gesehen</div><h1 style="color:${ci.acc}">${CATS[ck]}</h1><p class="lead">${ci.d}</p>
+ <div class="lcards">${ls.map((l,i)=>`<button class="lc" data-id="${l.id}"><canvas class="th" data-id="${l.id}"></canvas><div><small>LEKTION ${i+1}</small><b>${l.title}</b><span>${l.sub}</span></div>${seen[l.id]?'<div class="ok">✓</div>':''}</button>`).join('')}</div></div>`;
+ document.getElementById('back').onclick=()=>{location.hash='';};
+ view.querySelectorAll('.lc').forEach(b=>b.onclick=()=>location.hash=b.dataset.id);
+ drawThumbs();renderList();window.scrollTo(0,0);
+}
+function drawThumbs(){view.querySelectorAll('canvas.th').forEach(cv=>{const L=LESSONS.find(l=>l.id===cv.dataset.id);staticFrame(cv,L,L.thumb!=null?L.thumb:L.steps.length-1,.7,88,55,true);});}
+
+/* ============ Quiz ============ */
+const TQ=TQ_F,PQ=PQ_F;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+let Q=null;
+function startQuiz(){
+ current=null;P.L=null;P.cv=null;
+ const seenPic=new Set();const pics=shuffle(PQ.slice()).filter(x=>{const k=x.l+x.q;if(seenPic.has(x.l))return false;seenPic.add(x.l);return true;}).slice(0,4).map(x=>({pic:x,q:x.q,opts:shuffle(x.a.slice()),ans:x.a[0],e:x.e,l:x.l}));
+ const txt=shuffle(TQ.slice()).slice(0,10-pics.length).map(x=>({q:x.q,opts:shuffle(x.a.slice()),ans:x.a[0],e:x.e,l:x.l}));
+ Q={list:shuffle([...pics,...txt]),i:0,score:0,wrong:[]};renderList();renderQ();
+}
+function drawQuizPic(){const it=Q.list[Q.i],cv=document.getElementById('qcv');if(!cv||!it.pic)return;const L=LESSONS.find(l=>l.id===it.pic.l);const w=cv.parentElement.clientWidth,h=Math.round(clamp(w*.625,200,420));staticFrame(cv,L,it.pic.s,it.pic.p,w,h,true);}
+function renderQ(){
+ const it=Q.list[Q.i],n=Q.list.length;
+ view.innerHTML=`<button class="back" id="back">‹ Startseite</button>
+ <div class="kicker">Quiz · Frage ${Q.i+1} von ${n} · ${Q.score} richtig</div><h1>Teste dein Wissen</h1>
+ <div class="qcard"><div class="qbar"><i style="width:${Q.i/n*100}%"></i></div>
+ <p class="qq">${it.q}</p>${it.pic?'<div class="qcv"><canvas id="qcv"></canvas></div>':''}
+ <div class="opts">${it.opts.map((o,k)=>`<button class="opt" data-k="${k}">${String.fromCharCode(65+k)}) ${o}</button>`).join('')}</div>
+ <div id="fb"></div></div>`;
+ document.getElementById('back').onclick=()=>{location.hash='';};
+ if(it.pic)drawQuizPic();
+ view.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.k));window.scrollTo(0,0);
+}
+function answer(k){
+ const it=Q.list[Q.i],ok=it.opts[k]===it.ans;if(ok)Q.score++;else Q.wrong.push(it.l);
+ view.querySelectorAll('.opt').forEach((b,j)=>{b.disabled=true;if(it.opts[j]===it.ans)b.classList.add('ok');else if(j===k)b.classList.add('bad');});
+ const last=Q.i===Q.list.length-1,L=LESSONS.find(x=>x.id===it.l);
+ document.getElementById('fb').innerHTML=`<div class="fb"><b style="color:${ok?'var(--up)':'var(--down)'}">${ok?'✓ RICHTIG!':'✗ LEIDER FALSCH'}</b>${ok?'':` – richtig ist: <b>${it.ans}</b>`}<br>${it.e}</div>
+ <div class="qnav"><button id="tol">📖 Lektion: ${L?L.title:''}</button><button class="main" id="nx">${last?'Ergebnis ansehen':'Weiter ›'}</button></div>`;
+ document.getElementById('tol').onclick=()=>location.hash=it.l;
+ document.getElementById('nx').onclick=()=>{if(last)renderResult();else{Q.i++;renderQ();}};
+ document.getElementById('fb').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function renderResult(){
+ const n=Q.list.length,sc=Q.score;if(sc>best){best=sc;try{localStorage.setItem(KEY+'-best',best)}catch(e){}}renderList();
+ const msg=sc===n?'Perfekt! Du bist ein echter Weltraum-Profi. 🚀':sc>=8?'Sehr stark! Fast alles richtig. 💪':sc>=5?'Gut! Ein paar Lektionen kannst du noch wiederholen.':'Nicht schlimm – schau dir die Lektionen unten nochmal an und versuch es erneut.';
+ const rep=[...new Set(Q.wrong)].map(id=>LESSONS.find(l=>l.id===id)).filter(Boolean);
+ view.innerHTML=`<button class="back" id="back">‹ Startseite</button><div class="kicker">Quiz · Ergebnis</div><h1>Geschafft!</h1>
+ <div class="qcard"><div class="score" style="color:${sc>=8?'var(--up)':sc>=5?'var(--gold)':'var(--down)'}">${sc} / ${n}</div><p style="font-size:16px;margin:0 0 6px">${msg}</p>
+ <p style="color:var(--mute);font-family:var(--mono);font-size:12px;margin:0">BESTWERT: ${best} / ${n}</p>
+ ${rep.length?`<p style="margin:16px 0 6px;font-weight:700">Diese Lektionen solltest du wiederholen:</p><div class="opts">${rep.map(l=>`<button class="opt" data-id="${l.id}">📖 ${l.title}</button>`).join('')}</div>`:''}
+ <div class="qnav"><button id="home">Zur Übersicht</button><button class="main" id="again">🎯 Neues Quiz</button></div></div>`;
+ document.getElementById('back').onclick=()=>{location.hash='';};
+ view.querySelectorAll('.opt[data-id]').forEach(b=>b.onclick=()=>location.hash=b.dataset.id);
+ document.getElementById('home').onclick=()=>{location.hash='';};
+ document.getElementById('again').onclick=()=>{startQuiz();};
+}
+
+/* ---- Schleife ---- */
+function frame(ts){
+ const dt=P.last?Math.min(60,ts-P.last):0;P.last=ts;
+ if(P.L&&P.cv){
+  if(P.playing){P.t+=dt*P.speed;if(P.t>=P.tl.total){P.t=P.tl.total;P.playing=false;updBtn();markSeen(P.L.id);}P.dirty=true;}
+  if(P.dirty){const st=stAt(P.tl,P.t);render(P.ctx,P.W,P.H,P.L,st);
+   const sk=document.getElementById('seek');if(sk)sk.value=P.t;
+   if(st.s!==P.stepIdx){P.stepIdx=st.s;const si=st.s,cp=document.getElementById('captxt');cp.style.opacity=0;setTimeout(()=>{cp.textContent=P.tl.steps[si].text;cp.style.opacity=1;},120);
+    document.getElementById('stepno').textContent=`SCHRITT ${si+1} / ${P.tl.steps.length}`;
+    document.querySelectorAll('.chip').forEach((c,i)=>{c.classList.toggle('on',i===si);c.classList.toggle('done',i<si);});}
+   P.dirty=false;}
+ }
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{P.dirty=true;if(location.hash.startsWith('#kat-'))drawThumbs();});
+
+/* ============ Hell/Dunkel ============ */
+const mqLight=window.matchMedia?matchMedia('(prefers-color-scheme: light)'):null;
+function themeMode(){try{return localStorage.getItem('kompass-theme')||'dark'}catch(e){return 'dark'}}
+function applyTheme(m){const t=m==='auto'?(mqLight&&mqLight.matches?'light':'dark'):m;document.documentElement.setAttribute('data-theme',t);setCanvasTheme(t);
+ document.querySelectorAll('.theme button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.m===m)));
+ const mc=document.querySelector('meta[name=theme-color]');if(mc)mc.setAttribute('content',t==='light'?'#f3f5f9':'#05080d');
+ P.dirty=true;if(document.querySelector('canvas.th'))drawThumbs();if(document.getElementById('qcv'))drawQuizPic();}
+document.querySelectorAll('.theme button').forEach(b=>b.addEventListener('click',()=>{try{localStorage.setItem('kompass-theme',b.dataset.m)}catch(e){}applyTheme(b.dataset.m);}));
+if(mqLight&&mqLight.addEventListener)mqLight.addEventListener('change',()=>{if(themeMode()==='auto')applyTheme('auto');});
+applyTheme(themeMode());
+
+function route(){const id=location.hash.slice(1);if(id==='quiz')startQuiz();else if(id.startsWith('kat-'))showCat(id.slice(4));else if(id)openLesson(id);else showHome();}
+window.addEventListener('hashchange',route);
+updProg();route();
+
+</script>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
+</body>
+</html>
